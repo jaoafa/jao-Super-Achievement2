@@ -1,6 +1,6 @@
 name: ${project.artifactId}
 main: com.jaoafa.jaoSuperAchievement2.Main
-version: 2020.04.05_15.33
+version: 2020.04.05_17.08
 description: jaoSuperAchievement2
 database: true
 author: mine_book000
