@@ -5,6 +5,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -24,7 +25,7 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  * @category jao Achievement
  *
  */
-public class NoodleFactory {
+public class NoodleFactory implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void OnNoodleFactory(PlayerMoveEvent event) { // インベントリ系のイベントだといまいちなのであえて移動イベント
 		if (event.getFrom().distance(event.getTo()) == 0)
