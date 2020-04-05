@@ -123,8 +123,8 @@ public class Event_JSA implements Listener {
 					msg = ChatColor.RED + "実績未取得";
 					unlockdate = "(解除者数: " + gettedplayercount + "人)";
 
-					if (hidden) { // 隠し要素なら名前と説明の文字列を全部アスタリスクにする
-						title = replaceAsterisk(title);
+					if (hidden) { // 隠し要素なら説明の文字列を全部アスタリスクにする
+						//title = replaceAsterisk(title);
 						description = replaceAsterisk(description);
 					}
 				}
