@@ -63,7 +63,7 @@ public class Event_JSA implements Listener {
 			return;
 		}
 
-		if (is.getItemMeta().getDisplayName().equalsIgnoreCase("閉じる")) {
+		if (is.getItemMeta().getDisplayName().equalsIgnoreCase("閉じる") || is.getType() == Material.BARRIER) {
 			player.closeInventory();
 			return;
 		}
@@ -103,10 +103,10 @@ public class Event_JSA implements Listener {
 			ResultSet res = statement.executeQuery();
 			while (res.next()) {
 				int id = res.getInt("id");
-				String name = res.getString("name");
+				String title = res.getString("title");
 				String description = res.getString("description");
 				boolean hidden = res.getBoolean("hidden");
-				String date = res.getString("date");
+				String date = res.getString("created_at");
 				int gettedplayercount = getGettedPlayerCount(id);
 
 				boolean getted = isGetted(offplayer, id);
@@ -124,7 +124,7 @@ public class Event_JSA implements Listener {
 					unlockdate = "(解除者数: " + gettedplayercount + "人)";
 
 					if (hidden) { // 隠し要素なら名前と説明の文字列を全部アスタリスクにする
-						name = replaceAsterisk(name);
+						title = replaceAsterisk(title);
 						description = replaceAsterisk(description);
 					}
 				}
@@ -133,7 +133,7 @@ public class Event_JSA implements Listener {
 					hiddenmsg = "※隠し要素";
 
 				int damage = id % 16;
-				setItem(inv, i, material, damage, ChatColor.RESET + "[" + id + "] " + name,
+				setItem(inv, i, material, damage, ChatColor.RESET + "[" + id + "] " + title,
 						"" + ChatColor.RESET + ChatColor.GRAY + description,
 						"",
 						ChatColor.RESET + msg + " " + ChatColor.GOLD + ChatColor.UNDERLINE + hiddenmsg,
@@ -230,7 +230,7 @@ public class Event_JSA implements Listener {
 			Connection conn = sqlmanager.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(
-					"SELECT * FROM jaoSuperAchievement2 WHERE uuid = ? AND achievement_typeid = ?;");
+					"SELECT * FROM jaoSuperAchievement2 WHERE uuid = ? AND achievementid = ?;");
 			statement.setString(1, offplayer.getUniqueId().toString());
 			statement.setInt(2, id);
 			ResultSet res = statement.executeQuery();
@@ -251,7 +251,7 @@ public class Event_JSA implements Listener {
 			Connection conn = sqlmanager.getConnection();
 
 			PreparedStatement statement = conn
-					.prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2 WHERE achievement_typeid = ?;");
+					.prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2 WHERE achievementid = ?;");
 			statement.setInt(1, id);
 			ResultSet res = statement.executeQuery();
 			if (res.next()) {

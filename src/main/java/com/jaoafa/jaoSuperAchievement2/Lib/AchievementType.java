@@ -10,7 +10,7 @@ import com.jaoafa.jaoSuperAchievement2.MySQLDBManager;
 
 public class AchievementType {
 	private int id;
-	private String name;
+	private String title;
 	private String description;
 
 	public AchievementType(int id) {
@@ -23,7 +23,7 @@ public class AchievementType {
 			ResultSet res = statement.executeQuery();
 			if (res.next()) {
 				this.id = res.getInt("id");
-				name = res.getString("name");
+				title = res.getString("title");
 				description = res.getString("description");
 			} else {
 				throw new IllegalArgumentException("指定されたIDのjaoSuperAchievementは見つかりません。");
@@ -37,8 +37,8 @@ public class AchievementType {
 		return id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
 	public String getDescription() {

@@ -1,5 +1,7 @@
 package com.jaoafa.jaoSuperAchievement2;
 
+import java.lang.reflect.Constructor;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -10,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
 import com.jaoafa.jaoSuperAchievement2.Command.Cmd_JSA;
 import com.jaoafa.jaoSuperAchievement2.Event.Event_JSA;
+import com.jaoafa.jaoSuperAchievement2.Lib.ClassFinder;
 import com.jaoafa.jaoSuperAchievement2.Lib.Discord;
 
 public class Main extends JavaPlugin {
@@ -36,15 +39,41 @@ public class Main extends JavaPlugin {
 	}
 
 	private void LoadjaoAchievements() {
+		try {
+			ClassFinder classFinder = new ClassFinder(this.getClassLoader());
+			for (Class<?> clazz : classFinder.findClasses("com.jaoafa.jaoSuperAchievement2.Achievements")) {
+				if (!clazz.getName().startsWith("com.jaoafa.jaoSuperAchievement2.Achievements.")) {
+					continue;
+				}
+				if (clazz.getEnclosingClass() != null) {
+					continue;
+				}
+				if (clazz.getName().contains("$")) {
+					continue;
+				}
 
-	}
+				Constructor<?> construct = (Constructor<?>) clazz.getConstructor();
+				Object instance = construct.newInstance();
 
-	/**
-	 * リスナー設定の簡略化用
-	 * @param listener Listener
-	 */
-	private void registEvent(Listener l) {
-		getServer().getPluginManager().registerEvents(l, this);
+				if (instance instanceof Listener) {
+					try {
+						Listener listener = (Listener) instance;
+						getServer().getPluginManager().registerEvents(listener, this);
+						getLogger().info(clazz.getSimpleName() + " registered");
+					} catch (ClassCastException e) {
+						// commandexecutor not implemented
+						getLogger().info(clazz.getSimpleName() + ": Listener not implemented [1]");
+						continue;
+					}
+				} else {
+					getLogger().info(clazz.getSimpleName() + ": Listener not implemented [2]");
+					continue;
+				}
+			}
+		} catch (Exception e) { // ClassFinder.findClassesがそもそもException出すので仕方ないという判断で。
+			e.printStackTrace();
+			return;
+		}
 	}
 
 	private void Load_Config() {

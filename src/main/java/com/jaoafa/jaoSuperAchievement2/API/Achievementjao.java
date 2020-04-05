@@ -46,7 +46,7 @@ public class Achievementjao {
 			Connection conn = sqlmanager.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(
-					"INSERT INTO jaoSuperAchievement2 (player, uuid, achievement_typeid) VALUES (?, ?, ?);");
+					"INSERT INTO jaoSuperAchievement2 (player, uuid, achievementid) VALUES (?, ?, ?);");
 			statement.setString(1, player.getName());
 			statement.setString(2, player.getUniqueId().toString());
 			statement.setInt(3, type.getID());
@@ -56,9 +56,9 @@ public class Achievementjao {
 			return false;
 		}
 
-		Bukkit.broadcastMessage(AchievementAPI.getPrefix() + player.getName() + "が「" + type.getName() + "」を取得しました！");
+		Bukkit.broadcastMessage(AchievementAPI.getPrefix() + player.getName() + "が「" + type.getTitle() + "」を取得しました！");
 		Main.getDiscord().sendMessage("597423199227084800",
-				"**[jaoSuperAchievement2]** " + player.getName() + "が「" + type.getName() + "」を取得しました！");
+				"**[jaoSuperAchievement2]** " + player.getName() + "が「" + type.getTitle() + "」を取得しました！");
 
 		jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(player, type);
 		Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
@@ -91,7 +91,7 @@ public class Achievementjao {
 			Connection conn = sqlmanager.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(
-					"INSERT INTO jaoSuperAchievement2 (player, uuid, achievement_typeid) VALUES (?, ?, ?);");
+					"INSERT INTO jaoSuperAchievement2 (player, uuid, achievementid) VALUES (?, ?, ?);");
 			statement.setString(1, offplayer.getName());
 			statement.setString(2, offplayer.getUniqueId().toString());
 			statement.setInt(3, type.getID());
@@ -101,9 +101,10 @@ public class Achievementjao {
 			return false;
 		}
 
-		Bukkit.broadcastMessage(AchievementAPI.getPrefix() + offplayer.getName() + "が「" + type.getName() + "」を取得しました！");
+		Bukkit.broadcastMessage(
+				AchievementAPI.getPrefix() + offplayer.getName() + "が「" + type.getTitle() + "」を取得しました！");
 		Main.getDiscord().sendMessage("597423199227084800",
-				"**[jaoSuperAchievement2]** " + offplayer.getName() + "が「" + type.getName() + "」を取得しました！");
+				"**[jaoSuperAchievement2]** " + offplayer.getName() + "が「" + type.getTitle() + "」を取得しました！");
 
 		jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(offplayer, type);
 		Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
@@ -124,7 +125,7 @@ public class Achievementjao {
 			Connection conn = sqlmanager.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(
-					"SELECT * FROM jaoSuperAchievement2 WHERE uuid = ? AND achievement_typeid = ?");
+					"SELECT * FROM jaoSuperAchievement2 WHERE uuid = ? AND achievementid = ?");
 			statement.setString(1, player.getUniqueId().toString());
 			statement.setInt(2, type.getID());
 			ResultSet res = statement.executeQuery();
