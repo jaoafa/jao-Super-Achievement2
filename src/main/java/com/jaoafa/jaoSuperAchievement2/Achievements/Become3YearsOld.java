@@ -26,7 +26,7 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  */
 public class Become3YearsOld {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void OnEggCovered(PlayerMoveEvent event) { // インベントリ系のイベントだといまいちなのであえて移動イベント
+	public void OnBecome3YearsOld(PlayerMoveEvent event) { // インベントリ系のイベントだといまいちなのであえて移動イベント
 		if (event.getFrom().distance(event.getTo()) == 0)
 			return;
 		Player player = (Player) event.getPlayer();
