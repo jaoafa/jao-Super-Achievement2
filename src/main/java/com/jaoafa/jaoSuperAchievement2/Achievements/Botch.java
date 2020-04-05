@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
 import com.jaoafa.jaoSuperAchievement2.API.Achievementjao;
@@ -25,12 +24,6 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  *
  */
 public class Botch implements Listener {
-	JavaPlugin plugin;
-
-	public Botch(JavaPlugin plugin) {
-		this.plugin = plugin;
-	}
-
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();

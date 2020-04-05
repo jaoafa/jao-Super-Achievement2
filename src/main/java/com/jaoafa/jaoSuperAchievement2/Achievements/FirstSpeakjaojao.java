@@ -28,7 +28,6 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  */
 @SuppressWarnings("deprecation")
 public class FirstSpeakjaojao implements Listener {
-
 	Map<UUID, Long> JaoJaoTime = new HashMap<UUID, Long>();
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

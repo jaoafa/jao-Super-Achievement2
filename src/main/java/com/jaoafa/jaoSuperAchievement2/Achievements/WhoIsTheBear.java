@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
 import com.jaoafa.jaoSuperAchievement2.API.Achievementjao;
@@ -28,12 +27,6 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  *
  */
 public class WhoIsTheBear implements Listener {
-	JavaPlugin plugin;
-
-	public WhoIsTheBear(JavaPlugin plugin) {
-		this.plugin = plugin;
-	}
-
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void OnWhoIsTheBear(PlayerMoveEvent event) { // インベントリ系のイベントだといまいちなのであえて移動イベント
 		if (event.getFrom().distance(event.getTo()) == 0)

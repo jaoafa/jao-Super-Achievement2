@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
 import com.jaoafa.jaoSuperAchievement2.API.Achievementjao;
@@ -26,12 +25,6 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  *
  */
 public class FirstX4Z implements Listener {
-	JavaPlugin plugin;
-
-	public FirstX4Z(JavaPlugin plugin) {
-		this.plugin = plugin;
-	}
-
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void OnFirstX4Z(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
