@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -28,9 +28,10 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  */
 public class WhoIsTheBear implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void OnWhoIsTheBear(PlayerMoveEvent event) { // インベントリ系のイベントだといまいちなのであえて移動イベント
-		if (event.getFrom().distance(event.getTo()) == 0)
+	public void OnWhoIsTheBear(InventoryCloseEvent event) { // インベントリを閉じたとき
+		if (!(event.getPlayer() instanceof Player)) {
 			return;
+		}
 		Player player = (Player) event.getPlayer();
 
 		ItemStack helmet = player.getInventory().getHelmet();
