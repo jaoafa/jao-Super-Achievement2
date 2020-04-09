@@ -1,12 +1,12 @@
-name: ${project.artifactId}
+name: jao-Super-Achievement2
 main: com.jaoafa.jaoSuperAchievement2.Main
-version: 2020.04.09_14.21
-description: jaoSuperAchievement2
+version: 2020.04.09_21.31
+description: jao-Super-Achievement2
 database: true
 author: mine_book000
 commands:
-   jsa:
-      description: jaoSuperAchievement GUIを開きます。
-      usage: /<command>
-      permission: jaosuperachievement.jsa
-      permission-message: You do not have permission to perform this command.
+  jsa:
+    description: jaoSuperAchievement GUIを開きます。
+    usage: /<command>
+    permission: jaosuperachievement.jsa
+    permission-message: You do not have permission to perform this command.
