@@ -5,6 +5,7 @@ import java.util.Calendar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
@@ -23,7 +24,7 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  * @category jao Achievement
  *
  */
-public class AreYouOkeyAtThisTime {
+public class AreYouOkeyAtThisTime implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void OnNightLogin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();

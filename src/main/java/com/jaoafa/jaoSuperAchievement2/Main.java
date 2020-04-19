@@ -62,11 +62,11 @@ public class Main extends JavaPlugin {
 						getLogger().info(clazz.getSimpleName() + " registered");
 					} catch (ClassCastException e) {
 						// commandexecutor not implemented
-						getLogger().info(clazz.getSimpleName() + ": Listener not implemented [1]");
+						getLogger().warning(clazz.getSimpleName() + ": Listener not implemented [1]");
 						continue;
 					}
 				} else {
-					getLogger().info(clazz.getSimpleName() + ": Listener not implemented [2]");
+					getLogger().warning(clazz.getSimpleName() + ": Listener not implemented [2]");
 					continue;
 				}
 			}
