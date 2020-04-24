@@ -25,7 +25,12 @@ public class AchievementType {
 				this.id = res.getInt("id");
 				title = res.getString("title");
 				description = res.getString("description");
+
+				res.close();
+				statement.close();
 			} else {
+				res.close();
+				statement.close();
 				throw new IllegalArgumentException("指定されたIDのjaoSuperAchievementは見つかりません。");
 			}
 		} catch (SQLException e) {

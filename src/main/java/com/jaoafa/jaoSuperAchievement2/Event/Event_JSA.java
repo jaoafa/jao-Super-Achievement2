@@ -143,6 +143,9 @@ public class Event_JSA implements Listener {
 				i++;
 			}
 
+			res.close();
+			statement.close();
+
 			int all = getAchievementCount();
 			if (page <= 1) {
 				setItem(inv, 0, Material.BARRIER, ChatColor.RESET + "閉じる");
@@ -314,8 +317,13 @@ public class Event_JSA implements Listener {
 		PreparedStatement statement = conn.prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2_Type");
 		ResultSet res = statement.executeQuery();
 		if (res.next()) {
-			return res.getInt(1);
+			int ret = res.getInt(1);
+			res.close();
+			statement.close();
+			return ret;
 		} else {
+			res.close();
+			statement.close();
 			return -1;
 		}
 	}

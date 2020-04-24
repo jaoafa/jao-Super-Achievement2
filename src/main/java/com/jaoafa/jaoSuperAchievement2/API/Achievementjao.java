@@ -51,6 +51,7 @@ public class Achievementjao {
 			statement.setString(2, player.getUniqueId().toString());
 			statement.setInt(3, type.getID());
 			statement.executeUpdate();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -99,6 +100,7 @@ public class Achievementjao {
 			statement.setString(2, offplayer.getUniqueId().toString());
 			statement.setInt(3, type.getID());
 			statement.executeUpdate();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -142,8 +144,12 @@ public class Achievementjao {
 					gettedList.add(type.getID());
 					GettedAchievementCache.put(player.getUniqueId(), gettedList);
 				}
+				res.close();
+				statement.close();
 				return true;
 			} else {
+				res.close();
+				statement.close();
 				return false;
 			}
 		} catch (SQLException e) {
