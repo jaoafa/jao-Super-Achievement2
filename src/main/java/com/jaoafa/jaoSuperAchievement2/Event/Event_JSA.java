@@ -5,9 +5,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -78,6 +82,8 @@ public class Event_JSA implements Listener {
 	}
 
 	public static void openPage(Player player, OfflinePlayer offplayer, int page) {
+		player.sendMessage(AchievementAPI.getPrefix() + "情報を取得しています…しばらくお待ちください！");
+
 		try {
 			Inventory inv = Bukkit.getServer().createInventory(player, 4 * 9,
 					offplayer.getName() + "のjaoSuperAchievement");
@@ -97,6 +103,19 @@ public class Event_JSA implements Listener {
 			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
 			Connection conn = sqlmanager.getConnection();
 
+			String nowVer = Main.getJavaPlugin().getDescription().getVersion();
+			String[] day_time = nowVer.split("_");
+			String[] days = day_time[0].split("\\.");
+			String[] times = day_time[1].split("\\.");
+			Calendar build_cal = Calendar.getInstance();
+			build_cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+			build_cal.set(Integer.parseInt(days[0]),
+					Integer.parseInt(days[1]),
+					Integer.parseInt(days[2]),
+					Integer.parseInt(times[0]),
+					Integer.parseInt(times[1]));
+			Date build_date = build_cal.getTime();
+
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM jaoSuperAchievement2_Type LIMIT ?, ?");
 			statement.setInt(1, (page - 1) * 27);
 			statement.setInt(2, 27);
@@ -106,7 +125,8 @@ public class Event_JSA implements Listener {
 				String title = res.getString("title");
 				String description = res.getString("description");
 				boolean hidden = res.getBoolean("hidden");
-				String date = res.getString("created_at");
+				Timestamp date = res.getTimestamp("created_at");
+				String date_str = Main.sdfFormat(date);
 				int gettedplayercount = getGettedPlayerCount(id);
 
 				boolean getted = isGetted(offplayer, id);
@@ -115,9 +135,10 @@ public class Event_JSA implements Listener {
 				String hiddenmsg = "";
 				String unlockdate = "";
 				if (getted) {
+					String gettedTime = getGettedTime(offplayer, id);
 					material = Material.WOOL; // 取得済みなら羊毛
 					msg = ChatColor.GREEN + "実績取得済み";
-					unlockdate = "(解除日時: " + date + " | 解除者数: " + gettedplayercount + "人)";
+					unlockdate = "(解除日時: " + gettedTime + " | 解除者数: " + gettedplayercount + "人)";
 				} else {
 					material = Material.STAINED_GLASS; // 未取得なら色付きガラス
 					msg = ChatColor.RED + "実績未取得";
@@ -129,6 +150,9 @@ public class Event_JSA implements Listener {
 					}
 				}
 
+				// 登録時刻のほうが大きかったら
+				String unimplemented = date.after(build_date) ? " ※未実装の可能性有" : "";
+
 				if (hidden)
 					hiddenmsg = "※隠し要素";
 
@@ -137,7 +161,9 @@ public class Event_JSA implements Listener {
 						"" + ChatColor.RESET + ChatColor.GRAY + description,
 						"",
 						ChatColor.RESET + msg + " " + ChatColor.GOLD + ChatColor.UNDERLINE + hiddenmsg,
-						"" + ChatColor.RESET + ChatColor.BLUE + unlockdate);
+						"" + ChatColor.RESET + ChatColor.BLUE + unlockdate,
+						"" + ChatColor.RESET + ChatColor.LIGHT_PURPLE + "実装日時: " + date_str + ChatColor.RED
+								+ unimplemented);
 
 				//if(i >= 35) break;
 				i++;
@@ -238,13 +264,43 @@ public class Event_JSA implements Listener {
 			statement.setInt(2, id);
 			ResultSet res = statement.executeQuery();
 			if (res.next()) {
+				res.close();
+				statement.close();
 				return true;
 			} else {
+				res.close();
+				statement.close();
 				return false;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	static String getGettedTime(OfflinePlayer offplayer, int id) {
+		try {
+			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+			Connection conn = sqlmanager.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(
+					"SELECT * FROM jaoSuperAchievement2 WHERE uuid = ? AND achievementid = ?;");
+			statement.setString(1, offplayer.getUniqueId().toString());
+			statement.setInt(2, id);
+			ResultSet res = statement.executeQuery();
+			if (res.next()) {
+				String time = Main.sdfFormat(res.getTimestamp("created_at"));
+				res.close();
+				statement.close();
+				return time;
+			} else {
+				res.close();
+				statement.close();
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -258,8 +314,13 @@ public class Event_JSA implements Listener {
 			statement.setInt(1, id);
 			ResultSet res = statement.executeQuery();
 			if (res.next()) {
-				return res.getInt(1);
+				int ret = res.getInt(1);
+				res.close();
+				statement.close();
+				return ret;
 			} else {
+				res.close();
+				statement.close();
 				return 0;
 			}
 		} catch (SQLException e) {
@@ -284,8 +345,13 @@ public class Event_JSA implements Listener {
 		statement.setString(1, uuid.toString());
 		ResultSet res = statement.executeQuery();
 		if (res.next()) {
-			return res.getInt(1);
+			int ret = res.getInt(1);
+			res.close();
+			statement.close();
+			return ret;
 		} else {
+			res.close();
+			statement.close();
 			return 0;
 		}
 	}

@@ -1,6 +1,8 @@
 package com.jaoafa.jaoSuperAchievement2;
 
 import java.lang.reflect.Constructor;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -139,5 +141,10 @@ public class Main extends JavaPlugin {
 
 	public static MySQLDBManager getMySQLDBManager() {
 		return sqlmanager;
+	}
+
+	public static String sdfFormat(Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		return sdf.format(date);
 	}
 }
