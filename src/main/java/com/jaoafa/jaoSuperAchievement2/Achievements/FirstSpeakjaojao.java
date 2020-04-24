@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
@@ -26,12 +26,11 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  * @category jao Achievement
  *
  */
-@SuppressWarnings("deprecation")
 public class FirstSpeakjaojao implements Listener {
 	Map<UUID, Long> JaoJaoTime = new HashMap<UUID, Long>();
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void OnSpeakjaojao(PlayerChatEvent event) {
+	public void OnSpeakjaojao(AsyncPlayerChatEvent event) {
 		String message = event.getMessage();
 		Player player = event.getPlayer();
 		if (!message.equalsIgnoreCase("jaojao")) {

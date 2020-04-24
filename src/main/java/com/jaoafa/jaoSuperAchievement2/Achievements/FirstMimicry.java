@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
 import com.jaoafa.jaoSuperAchievement2.API.Achievementjao;
@@ -23,13 +23,12 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
  * @category jao Achievement
  *
  */
-@SuppressWarnings("deprecation")
 public class FirstMimicry implements Listener {
 	String OLDMessage = null;
 	UUID OLDPlayerUUID = null;
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void OnSpeakjao_afa(PlayerChatEvent event) {
+	public void OnSpeakjao_afa(AsyncPlayerChatEvent event) {
 		String message = event.getMessage();
 		Player player = event.getPlayer();
 
