@@ -54,14 +54,14 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
 			sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.AQUA + "最新バージョン: " + latestVer);
 		}
 
-		sender.sendMessage(AchievementAPI.getPrefix() + "最近の更新履歴");
+		sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.GREEN + "最近の更新履歴");
 		List<String> commits = getCommits(desc.getName());
 		if (commits == null) {
-			sender.sendMessage(AchievementAPI.getPrefix() + "- コミット履歴の取得に失敗しました。");
+			sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.GREEN + "- コミット履歴の取得に失敗しました。");
 			return true;
 		}
 		for (String commit : commits) {
-			sender.sendMessage(AchievementAPI.getPrefix() + "- " + commit);
+			sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.GREEN + "- " + commit);
 		}
 		return true;
 	}
