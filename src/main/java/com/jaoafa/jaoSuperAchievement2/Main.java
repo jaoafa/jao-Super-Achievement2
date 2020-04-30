@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
 import com.jaoafa.jaoSuperAchievement2.Command.Cmd_JSA;
+import com.jaoafa.jaoSuperAchievement2.Command.Cmd_jaoSuperAchievement2;
 import com.jaoafa.jaoSuperAchievement2.Event.Event_JSA;
 import com.jaoafa.jaoSuperAchievement2.Lib.ClassFinder;
 import com.jaoafa.jaoSuperAchievement2.Lib.Discord;
@@ -31,6 +32,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		getCommand("jsa").setExecutor(new Cmd_JSA(this));
+		getCommand("jaosuperachievement2").setExecutor(new Cmd_jaoSuperAchievement2());
 		getServer().getPluginManager().registerEvents(new Event_JSA(this), this);
 
 		JavaPlugin = this;

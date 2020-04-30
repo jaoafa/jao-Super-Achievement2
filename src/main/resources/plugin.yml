@@ -1,6 +1,6 @@
 name: jao-Super-Achievement2
 main: com.jaoafa.jaoSuperAchievement2.Main
-version: 2020.04.29_13.46
+version: 2020.05.01_05.56
 description: jao-Super-Achievement2
 database: true
 author: mine_book000
@@ -9,4 +9,9 @@ commands:
     description: jaoSuperAchievement GUIを開きます。
     usage: /<command>
     permission: jaosuperachievement.jsa
+    permission-message: You do not have permission to perform this command.
+  jaosuperachievement2:
+    description: jaoSuperAchievement2のリリース情報を表示します。
+    usage: /<command>
+    permission: jaosuperachievement.jaosuperachievement2
     permission-message: You do not have permission to perform this command.
