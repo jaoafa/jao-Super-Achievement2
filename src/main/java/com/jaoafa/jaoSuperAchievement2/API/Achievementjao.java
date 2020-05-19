@@ -59,7 +59,8 @@ public class Achievementjao {
 
 		Bukkit.broadcastMessage(AchievementAPI.getPrefix() + player.getName() + "が「" + type.getTitle() + "」を取得しました！");
 		Main.getDiscord().sendMessage("597423199227084800",
-				"**[jaoSuperAchievement2]** " + player.getName() + "が「" + type.getTitle() + "」を取得しました！");
+				"**[jaoSuperAchievement2]** " + DiscordEscape(player.getName()) + "が「" + DiscordEscape(type.getTitle())
+						+ "」を取得しました！");
 
 		jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(player, type);
 		Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
@@ -109,7 +110,8 @@ public class Achievementjao {
 		Bukkit.broadcastMessage(
 				AchievementAPI.getPrefix() + offplayer.getName() + "が「" + type.getTitle() + "」を取得しました！");
 		Main.getDiscord().sendMessage("597423199227084800",
-				"**[jaoSuperAchievement2]** " + offplayer.getName() + "が「" + type.getTitle() + "」を取得しました！");
+				"**[jaoSuperAchievement2]** " + DiscordEscape(offplayer.getName()) + "が「"
+						+ DiscordEscape(type.getTitle()) + "」を取得しました！");
 
 		jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(offplayer, type);
 		Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
@@ -156,5 +158,9 @@ public class Achievementjao {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	static String DiscordEscape(String text) {
+		return text == null ? "" : text.replace("_", "\\_").replace("*", "\\*").replace("~", "\\~");
 	}
 }
