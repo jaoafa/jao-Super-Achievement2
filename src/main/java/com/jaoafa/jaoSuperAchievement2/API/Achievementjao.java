@@ -107,11 +107,14 @@ public class Achievementjao {
 			return false;
 		}
 
+		int gettedPlayerCount = getGettedPlayerCount(type.getID());
+
 		Bukkit.broadcastMessage(
-				AchievementAPI.getPrefix() + offplayer.getName() + "が「" + type.getTitle() + "」を取得しました！");
+				AchievementAPI.getPrefix() + offplayer.getName() + "が「" + type.getTitle() + "」を取得しました！ ("
+						+ gettedPlayerCount + "人目)");
 		Main.getDiscord().sendMessage("597423199227084800",
 				"**[jaoSuperAchievement2]** " + DiscordEscape(offplayer.getName()) + "が「"
-						+ DiscordEscape(type.getTitle()) + "」を取得しました！");
+						+ DiscordEscape(type.getTitle()) + "」を取得しました！ (" + gettedPlayerCount + "人目)");
 
 		jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(offplayer, type);
 		Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
@@ -157,6 +160,31 @@ public class Achievementjao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	static int getGettedPlayerCount(int id) {
+		try {
+			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+			Connection conn = sqlmanager.getConnection();
+
+			PreparedStatement statement = conn
+					.prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2 WHERE achievementid = ?;");
+			statement.setInt(1, id);
+			ResultSet res = statement.executeQuery();
+			if (res.next()) {
+				int ret = res.getInt(1);
+				res.close();
+				statement.close();
+				return ret;
+			} else {
+				res.close();
+				statement.close();
+				return 0;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
 		}
 	}
 

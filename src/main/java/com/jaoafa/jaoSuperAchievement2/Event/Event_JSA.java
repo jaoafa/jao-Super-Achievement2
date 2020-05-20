@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -304,25 +305,41 @@ public class Event_JSA implements Listener {
 		}
 	}
 
+	static Map<Integer, Integer> gettedPlayerCountCache = new LinkedHashMap<>();
+	static long gettedPlayerCountCache_unixtime = -1;
+
 	static int getGettedPlayerCount(int id) {
+		if (gettedPlayerCountCache_unixtime != -1
+				&& gettedPlayerCountCache_unixtime > (System.currentTimeMillis() / 1000) - 3600
+				&& gettedPlayerCountCache.containsKey(id)) {
+			// キャッシュから
+			System.out.println("getGettedPlayerCount(): from cache... gettedPlayerCountCache_unixtime: "
+					+ gettedPlayerCountCache_unixtime);
+			return gettedPlayerCountCache.get(id);
+		}
+		// DBから
+		System.out.println("getGettedPlayerCount(): from db... gettedPlayerCountCache_unixtime: "
+				+ gettedPlayerCountCache_unixtime);
 		try {
 			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
 			Connection conn = sqlmanager.getConnection();
 
 			PreparedStatement statement = conn
-					.prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2 WHERE achievementid = ?;");
-			statement.setInt(1, id);
+					.prepareStatement("SELECT * FROM jaoSuperAchievement2;");
 			ResultSet res = statement.executeQuery();
-			if (res.next()) {
-				int ret = res.getInt(1);
-				res.close();
-				statement.close();
-				return ret;
-			} else {
-				res.close();
-				statement.close();
-				return 0;
+			while (res.next()) {
+				int achievementID = res.getInt("achievementid");
+				if (gettedPlayerCountCache.containsKey(achievementID)) {
+					gettedPlayerCountCache.put(achievementID,
+							gettedPlayerCountCache.get(achievementID) + 1);
+				} else {
+					gettedPlayerCountCache.put(achievementID, 1);
+				}
 			}
+			res.close();
+			statement.close();
+			gettedPlayerCountCache_unixtime = System.currentTimeMillis() / 1000;
+			return gettedPlayerCountCache.get(id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return 0;
