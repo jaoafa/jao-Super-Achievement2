@@ -313,13 +313,9 @@ public class Event_JSA implements Listener {
 				&& gettedPlayerCountCache_unixtime > (System.currentTimeMillis() / 1000) - 3600
 				&& gettedPlayerCountCache.containsKey(id)) {
 			// キャッシュから
-			System.out.println("getGettedPlayerCount(): from cache... gettedPlayerCountCache_unixtime: "
-					+ gettedPlayerCountCache_unixtime);
 			return gettedPlayerCountCache.get(id);
 		}
 		// DBから
-		System.out.println("getGettedPlayerCount(): from db... gettedPlayerCountCache_unixtime: "
-				+ gettedPlayerCountCache_unixtime);
 		try {
 			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
 			Connection conn = sqlmanager.getConnection();
