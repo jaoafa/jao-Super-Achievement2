@@ -4,33 +4,35 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
 import com.jaoafa.jaoSuperAchievement2.API.Achievementjao;
 import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
 
 /**
- * No. 43
+ * No. 44
  *
- * そうだ、地底人になろう
- * 奈落に落ちて死ぬ
- * 奈落に落ちて死んだ時に発動 -> Y-64以下での死亡時
+ * 感謝の極み
+ * 「jaox」と発言する
+ * jaoxと発言した場合
+ * ※隠し要素
  *
  * @since 2020/05/21
  * @category jao Achievement
  *
  */
-public class UndergroundPeople implements Listener {
+public class Firstjaox implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void OnDeath(PlayerDeathEvent event) {
-		Player player = event.getEntity();
+	public void OnSpeak(AsyncPlayerChatEvent event) {
+		String message = event.getMessage();
+		Player player = event.getPlayer();
 
-		if (player.getLocation().getY() > -64D) {
+		if (!message.equalsIgnoreCase("jaox")) {
 			return;
 		}
 
-		if (!Achievementjao.getAchievement(player, new AchievementType(43))) {
+		if (!Achievementjao.getAchievement(player, new AchievementType(44))) {
 			player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
 			return;
 		}
