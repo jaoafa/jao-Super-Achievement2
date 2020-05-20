@@ -57,10 +57,13 @@ public class Achievementjao {
 			return false;
 		}
 
-		Bukkit.broadcastMessage(AchievementAPI.getPrefix() + player.getName() + "が「" + type.getTitle() + "」を取得しました！");
+		int gettedPlayerCount = getGettedPlayerCount(type.getID());
+
+		Bukkit.broadcastMessage(AchievementAPI.getPrefix() + player.getName() + "が「" + type.getTitle() + "」を取得しました！ ("
+				+ gettedPlayerCount + "人目)");
 		Main.getDiscord().sendMessage("597423199227084800",
 				"**[jaoSuperAchievement2]** " + DiscordEscape(player.getName()) + "が「" + DiscordEscape(type.getTitle())
-						+ "」を取得しました！");
+						+ "」を取得しました！ (" + gettedPlayerCount + "人目)");
 
 		jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(player, type);
 		Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
