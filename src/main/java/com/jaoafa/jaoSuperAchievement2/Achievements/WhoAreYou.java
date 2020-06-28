@@ -11,26 +11,26 @@ import com.jaoafa.jaoSuperAchievement2.API.Achievementjao;
 import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
 
 /**
- * No. 47
+ * No. 48
  *
- * 驚きを隠せないようです
- * maj?と発言する
- * maj?と発言する
+ * どちら様ですか？
+ * 「Jao」と"j"を大文字にして発言する
+ * 「Jao」と"j"を大文字にして発言する
  *
  * @since 2020/06/28
  * @category jao Achievement
  *
  */
-public class CantHideSurprises implements Listener {
+public class WhoAreYou implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void OnSpeak(AsyncPlayerChatEvent event) {
 		String message = event.getMessage();
 		Player player = event.getPlayer();
-		if (!message.equals("maj?")) {
+		if (!message.contains("Jao")) {
 			return;
 		}
 
-		if (!Achievementjao.getAchievement(player, new AchievementType(47))) {
+		if (!Achievementjao.getAchievement(player, new AchievementType(48))) {
 			player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
 			return;
 		}
