@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -16,27 +15,45 @@ import com.jaoafa.jaoSuperAchievement2.API.Achievementjao;
 import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
 
 /**
- * No. 8
+ * No. 50
  *
- * 砂利を感じに
- * 鯖管と時間を共にする
- * X4Zがいる時にログインする
+ * たまごとケチャップの合わせ技
+ * X9Z,mine_book000と時間をともにする
+ * X9Z,mine_book000の両方がいるときにログインする
+ * ※隠し要素
  *
- * @since 2020/04/05
+ * @since 2020/06/28
  * @category jao Achievement
  *
  */
-public class FirstX4Z implements Listener {
+public class EggAndKetchup {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void OnFirstX4Z(PlayerJoinEvent event) {
+	public void On(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 
 		new BukkitRunnable() {
 			public void run() {
-				UUID X4Zuuid = UUID.fromString("5799296a-d1ec-4252-93bd-440bb9caa65c");
-				if (player.getUniqueId().equals(X4Zuuid)) {
+				UUID mine_book000_uuid = UUID.fromString("32ff7cdc-a1b4-450a-aa7e-6af75fe8c37c");
+				Player mine_book000 = Bukkit.getPlayer(mine_book000_uuid);
+				UUID X9Z_uuid = UUID.fromString("7008531a-539b-4dfc-8b81-7b267d18dd0a");
+				Player X9Z = Bukkit.getPlayer(X9Z_uuid);
+
+				if (mine_book000 == null) {
+					return;
+				}
+				if (!mine_book000.isOnline()) {
+					return;
+				}
+				if (X9Z == null) {
+					return;
+				}
+				if (!X9Z.isOnline()) {
+					return;
+				}
+
+				if (player.getUniqueId().equals(mine_book000_uuid) || player.getUniqueId().equals(X9Z_uuid)) {
 					for (Player play : Bukkit.getServer().getOnlinePlayers()) {
-						if (!Achievementjao.getAchievement(play, new AchievementType(8))) {
+						if (!Achievementjao.getAchievement(play, new AchievementType(50))) {
 							play.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
 							return;
 						}
@@ -44,14 +61,8 @@ public class FirstX4Z implements Listener {
 					return;
 				}
 
-				Player X4Z = Bukkit.getPlayer(X4Zuuid);
-				if (X4Z == null)
-					return;
-				if (!X4Z.isOnline())
-					return;
-
 				// どうせgetAchievement側ですでに取得してるかどうかは検査されるのでそのまま。
-				if (!Achievementjao.getAchievement(player, new AchievementType(8))) {
+				if (!Achievementjao.getAchievement(player, new AchievementType(50))) {
 					player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
 					return;
 				}
