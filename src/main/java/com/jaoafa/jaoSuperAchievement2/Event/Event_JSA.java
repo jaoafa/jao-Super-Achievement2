@@ -335,6 +335,9 @@ public class Event_JSA implements Listener {
 			res.close();
 			statement.close();
 			gettedPlayerCountCache_unixtime = System.currentTimeMillis() / 1000;
+			if (!gettedPlayerCountCache.containsKey(id)) {
+				return 0;
+			}
 			return gettedPlayerCountCache.get(id);
 		} catch (SQLException e) {
 			e.printStackTrace();
