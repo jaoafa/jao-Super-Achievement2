@@ -8,8 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.jaoafa.jaoSuperAchievement2.Main;
 import com.jaoafa.jaoSuperAchievement2.API.AchievementAPI;
-import com.jaoafa.jaoSuperAchievement2.Event.Event_JSA;
+import com.jaoafa.jaoSuperAchievement2.Task.Task_OpenPage;
 
 public class Cmd_JSA implements CommandExecutor {
 	JavaPlugin plugin;
@@ -32,10 +33,10 @@ public class Cmd_JSA implements CommandExecutor {
 				sender.sendMessage(AchievementAPI.getPrefix() + "指定されたプレイヤー「" + args[0] + "」は見つかりませんでした。");
 				return true;
 			}
-			Event_JSA.openPage(player, offplayer, 1);
+			new Task_OpenPage(player, offplayer, 1).runTaskAsynchronously(Main.getJavaPlugin());
 		} else {
 			Player player = (Player) sender;
-			Event_JSA.openPage(player, player, 1);
+			new Task_OpenPage(player, player, 1).runTaskAsynchronously(Main.getJavaPlugin());
 		}
 		return true;
 	}
