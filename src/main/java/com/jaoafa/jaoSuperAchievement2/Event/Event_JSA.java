@@ -58,11 +58,9 @@ public class Event_JSA implements Listener {
 
 		if (event.getSlot() == 0) {
 			// 前へ
-			player.closeInventory();
 			new Task_OpenPage(player, offplayer, page - 1).runTaskAsynchronously(Main.getJavaPlugin());
 		} else if (event.getSlot() == 8) {
 			// 次へ
-			player.closeInventory();
 			new Task_OpenPage(player, offplayer, page + 1).runTaskAsynchronously(Main.getJavaPlugin());
 		}
 	}

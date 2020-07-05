@@ -149,7 +149,7 @@ public class Task_OpenPage extends BukkitRunnable {
 
 			PlayerPageData ppd = new PlayerPageData(offplayer, page);
 			Event_JSA.jSA.put(player.getName(), ppd);
-			player.openInventory(inv);
+			new Task_OpenInventory(player, inv).runTask(Main.getJavaPlugin());
 			return;
 
 		} catch (SQLException | ClassNotFoundException e) {
