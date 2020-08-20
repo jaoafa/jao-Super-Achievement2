@@ -71,11 +71,7 @@ public class Task_OpenPage extends BukkitRunnable {
 			String[] times = day_time[1].split("\\.");
 			Calendar build_cal = Calendar.getInstance();
 			build_cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
-			build_cal.set(Integer.parseInt(days[0]),
-					Integer.parseInt(days[1]),
-					Integer.parseInt(days[2]),
-					Integer.parseInt(times[0]),
-					Integer.parseInt(times[1]));
+			build_cal.set(Integer.parseInt(days[0]), Integer.parseInt(days[1]), Integer.parseInt(days[2]), Integer.parseInt(times[0]), Integer.parseInt(times[1]));
 			Date build_date = build_cal.getTime();
 
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM jaoSuperAchievement2_Type LIMIT ?, ?");
@@ -95,7 +91,7 @@ public class Task_OpenPage extends BukkitRunnable {
 				Material material;
 				String msg;
 				String hiddenmsg = "";
-				String unlockdate = "";
+				String unlockdate;
 				if (getted) {
 					String gettedTime = getGettedTime(offplayer, id);
 					material = Material.WOOL; // 取得済みなら羊毛
@@ -137,7 +133,7 @@ public class Task_OpenPage extends BukkitRunnable {
 			int all = getAchievementCount();
 			if (page <= 1) {
 				setItem(inv, 0, Material.BARRIER, ChatColor.RESET + "閉じる");
-			} else if (page >= 2) {
+			} else {
 				setItemSkull(inv, 0, "MHF_ArrowLeft", ChatColor.RESET + "前へ");
 			}
 			if (all >= (page * 27) + 1) {
@@ -150,13 +146,11 @@ public class Task_OpenPage extends BukkitRunnable {
 			PlayerPageData ppd = new PlayerPageData(offplayer, page);
 			Event_JSA.jSA.put(player.getName(), ppd);
 			new Task_OpenInventory(player, inv).runTask(Main.getJavaPlugin());
-			return;
 
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			player.sendMessage(
 					AchievementAPI.getPrefix() + ChatColor.YELLOW + "データベースサーバに接続できなかったか、操作に失敗しました。開発部にお問い合わせください。");
 			e.printStackTrace();
-			return;
 		}
 	}
 
@@ -276,6 +270,7 @@ public class Task_OpenPage extends BukkitRunnable {
 			// キャッシュから
 			return gettedPlayerCountCache.get(id);
 		}
+		gettedPlayerCountCache.remove(id);
 		// DBから
 		try {
 			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
@@ -310,10 +305,9 @@ public class Task_OpenPage extends BukkitRunnable {
 	 * 取得済み実績数を返却
 	 * @param uuid UUID
 	 * @return 取得済み実績数
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
-	int getGettedAchievementCount(UUID uuid) throws ClassNotFoundException, SQLException {
+	int getGettedAchievementCount(UUID uuid) throws SQLException {
 		MySQLDBManager sqlmanager = Main.getMySQLDBManager();
 		Connection conn = sqlmanager.getConnection();
 
@@ -337,10 +331,9 @@ public class Task_OpenPage extends BukkitRunnable {
 	 * 未取得済み実績数を返却
 	 * @param uuid UUID
 	 * @return 未取得済み実績数
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
-	int getNotGettedAchievementCount(UUID uuid) throws ClassNotFoundException, SQLException {
+	int getNotGettedAchievementCount(UUID uuid) throws SQLException {
 		int all = getAchievementCount();
 		int getted = getGettedAchievementCount(uuid);
 		return all - getted;
@@ -348,12 +341,10 @@ public class Task_OpenPage extends BukkitRunnable {
 
 	/**
 	 * すべての実績数を返却
-	 * @param uuid UUID
 	 * @return すべての実績数
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
+	 * @throws SQLException SQLException
 	 */
-	int getAchievementCount() throws ClassNotFoundException, SQLException {
+	int getAchievementCount() throws SQLException {
 		MySQLDBManager sqlmanager = Main.getMySQLDBManager();
 		Connection conn = sqlmanager.getConnection();
 
