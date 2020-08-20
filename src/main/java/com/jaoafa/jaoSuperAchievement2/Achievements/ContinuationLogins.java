@@ -6,6 +6,7 @@ import com.jaoafa.jaoSuperAchievement2.Lib.AchievementType;
 import com.jaoafa.jaoSuperAchievement2.Main;
 import com.jaoafa.jaoSuperAchievement2.MySQLDBManager;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 
@@ -31,6 +32,7 @@ import java.util.Date;
  * @category jao Achievement
  */
 public class ContinuationLogins implements Listener {
+    @EventHandler
     public void onLogin(PlayerLoginEvent event){
         // この時点でSQLにログイン記録が入っているはず。login_successチェックはしない。
         Player player = event.getPlayer();
