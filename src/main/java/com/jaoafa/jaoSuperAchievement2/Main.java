@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.jaoafa.jaoSuperAchievement2.Task.Task_jaoests;
+import com.jaoafa.jaoSuperAchievement2.Task.Task_jaoists;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -128,7 +128,7 @@ public class Main extends JavaPlugin {
 	}
 
 	private void Load_Task(){
-		new Task_jaoests().runTaskTimerAsynchronously(this, 0L, 1200L);
+		new Task_jaoists().runTaskTimerAsynchronously(this, 0L, 1200L);
 	}
 
 	public static void SendMessage(CommandSender sender, Command cmd, String text) {
