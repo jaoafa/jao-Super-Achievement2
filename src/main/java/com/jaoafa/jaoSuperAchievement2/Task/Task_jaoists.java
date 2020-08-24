@@ -8,7 +8,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Task_jaoests extends BukkitRunnable {
+public class Task_jaoists extends BukkitRunnable {
 
     @Override
     public void run() {
@@ -24,7 +24,7 @@ public class Task_jaoests extends BukkitRunnable {
     /**
      * No. 62
      *
-     * ふつうのjaoest
+     * ふつうのjaoist
      * サーバのログイン時間が1時間を超える
      * サーバのログイン時間が1時間を超える
      *
@@ -47,7 +47,7 @@ public class Task_jaoests extends BukkitRunnable {
     /**
      * No. 63
      *
-     * まことのjaoest
+     * まことのjaoist
      * サーバのログイン時間が1日を超える
      * サーバのログイン時間が1日を超える
      *
@@ -70,7 +70,7 @@ public class Task_jaoests extends BukkitRunnable {
     /**
      * No. 64
      *
-     * スーパーjaoest
+     * スーパーjaoist
      * サーバのログイン時間が1週間を超える
      * サーバのログイン時間が1週間を超える
      *
