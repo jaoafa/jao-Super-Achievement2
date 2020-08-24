@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.jaoafa.jaoSuperAchievement2.Task.Task_jaoests;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -39,7 +40,7 @@ public class Main extends JavaPlugin {
 
 		LoadjaoAchievements();
 		Load_Config();
-		//LoadTask();
+		Load_Task();
 	}
 
 	private void LoadjaoAchievements() {
@@ -56,7 +57,7 @@ public class Main extends JavaPlugin {
 					continue;
 				}
 
-				Constructor<?> construct = (Constructor<?>) clazz.getConstructor();
+				Constructor<?> construct = clazz.getConstructor();
 				Object instance = construct.newInstance();
 
 				if (instance instanceof Listener) {
@@ -67,16 +68,13 @@ public class Main extends JavaPlugin {
 					} catch (ClassCastException e) {
 						// commandexecutor not implemented
 						getLogger().warning(clazz.getSimpleName() + ": Listener not implemented [1]");
-						continue;
 					}
 				} else {
 					getLogger().warning(clazz.getSimpleName() + ": Listener not implemented [2]");
-					continue;
 				}
 			}
 		} catch (Exception e) { // ClassFinder.findClassesがそもそもException出すので仕方ないという判断で。
 			e.printStackTrace();
-			return;
 		}
 	}
 
@@ -127,6 +125,10 @@ public class Main extends JavaPlugin {
 		} else {
 			discord = new Discord(conf.getString("discordtoken"));
 		}
+	}
+
+	private void Load_Task(){
+		new Task_jaoests().runTaskTimerAsynchronously(this, 0L, 1200L);
 	}
 
 	public static void SendMessage(CommandSender sender, Command cmd, String text) {
