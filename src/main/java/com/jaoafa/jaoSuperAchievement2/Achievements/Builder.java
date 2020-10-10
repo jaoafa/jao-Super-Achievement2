@@ -18,7 +18,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
  * 建築をする
  * ブロックを256個以上設置する
  *
- * @since 2020/04/05
+ * @since 2020/10/10
  * @category jao Achievement
  *
  */
