@@ -15,14 +15,13 @@ import java.util.UUID;
 
 /**
  * No. 68
- *
+ * <p>
  * スパマーじゃん
  * 同じことを二回連続で発言する
  * 同じことを二連続で発言した場合
  *
- * @since 2020/08/24
  * @category jao Achievement
- *
+ * @since 2020/08/24
  */
 public class Spammer implements Listener {
     Map<UUID, String> map = new HashMap<>();
@@ -32,10 +31,10 @@ public class Spammer implements Listener {
         String message = event.getMessage();
         Player player = event.getPlayer();
 
-        if(map.containsKey(player.getUniqueId())){
+        if (map.containsKey(player.getUniqueId())) {
             String oldMessage = map.get(player.getUniqueId());
-            if(oldMessage.equals(message)){
-                if(!Achievementjao.getAchievement(player, new AchievementType(68))){
+            if (oldMessage.equals(message)) {
+                if (!Achievementjao.getAchievement(player, new AchievementType(68))) {
                     player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
                 }
             }

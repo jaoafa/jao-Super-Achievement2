@@ -16,14 +16,13 @@ import java.util.UUID;
 
 /**
  * No. 73
- *
+ * <p>
  * XnZ
  * Admin,ModeratorのXnZと時間を共にする
  * X4Z,X5Z,X9Z全員がログインしている時にログインする
  *
- * @since 2020/10/11
  * @category jao Achievement
- *
+ * @since 2020/10/11
  */
 public class XnZ implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

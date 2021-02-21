@@ -9,29 +9,33 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 /**
- * No. 51
+ * No. 76
  * <p>
- * 大草原不可避ww
- * チャット欄に草を生やす
- * 「草」と発言した場合
+ * それは許されない挨拶です。
+ * 「jao afa」と発言する。
+ * 「jao afa」と発言する。
  *
  * @category jao Achievement
- * @since 2020/08/20
+ * @since 2021/02/22
  */
-public class Grass implements Listener {
+public class UnforgivableGreetings implements Listener {
+    Map<UUID, String> OldMessage = new HashMap<>();
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnSpeak(AsyncPlayerChatEvent event) {
+    public void OnSpeakjaoafa(AsyncPlayerChatEvent event) {
         String message = event.getMessage();
         Player player = event.getPlayer();
-
-        if (!message.equalsIgnoreCase("草")) {
+        if (!message.equals("jao afa")) {
             return;
         }
 
-        if (!Achievementjao.getAchievement(player, new AchievementType(51))) {
+        if (!Achievementjao.getAchievement(player, new AchievementType(76))) {
             player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-            return;
         }
     }
 }

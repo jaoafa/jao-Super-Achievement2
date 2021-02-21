@@ -15,15 +15,14 @@ import java.util.UUID;
 
 /**
  * No. 52
- *
+ * <p>
  * おかえりなさいませ
  * 「rejao afa」と発言する
  * 「rejao」と発言したあとに「afa」と発言した場合・または、「rj」と発言した場合
  * ※隠し要素
  *
- * @since 2020/08/20
  * @category jao Achievement
- *
+ * @since 2020/08/20
  */
 public class WelcomeBack implements Listener {
     Map<UUID, String> OldMessage = new HashMap<>();
@@ -32,7 +31,7 @@ public class WelcomeBack implements Listener {
     public void OnSpeakrejao_afa(AsyncPlayerChatEvent event) {
         String message = event.getMessage();
         Player player = event.getPlayer();
-        if(message.equalsIgnoreCase("rj")){
+        if (message.equalsIgnoreCase("rj")) {
             if (!Achievementjao.getAchievement(player, new AchievementType(52))) {
                 player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
             }

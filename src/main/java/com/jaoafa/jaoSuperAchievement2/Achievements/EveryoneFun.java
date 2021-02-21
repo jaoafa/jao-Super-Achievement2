@@ -12,18 +12,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.UUID;
-
 /**
  * No. 74
- *
+ * <p>
  * 皆いると楽しい
  * 10人以上といっしょに遊ぶ
  * 鯖に自分含めて10人いる
  *
- * @since 2020/10/11
  * @category jao Achievement
- *
+ * @since 2020/10/11
  */
 public class EveryoneFun implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -32,7 +29,7 @@ public class EveryoneFun implements Listener {
 
         new BukkitRunnable() {
             public void run() {
-                if(Bukkit.getServer().getOnlinePlayers().size() < 10){
+                if (Bukkit.getServer().getOnlinePlayers().size() < 10) {
                     return;
                 }
 

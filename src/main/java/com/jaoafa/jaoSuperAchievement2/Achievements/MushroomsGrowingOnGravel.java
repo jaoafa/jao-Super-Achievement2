@@ -16,14 +16,13 @@ import java.util.UUID;
 
 /**
  * No. 72
- *
+ * <p>
  * 砂利の上に生えたきのこ
  * X4Z,Hirotaisou2012と時間をともにする
  * X4Z,Hirotaisou2012がいるときにログインする（している）
  *
- * @since 2020/10/10
  * @category jao Achievement
- *
+ * @since 2020/10/10
  */
 public class MushroomsGrowingOnGravel implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

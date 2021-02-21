@@ -11,14 +11,13 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
  * No. 70
- *
+ * <p>
  * よくわからん
  * 「？。？」と発言する
  * 鯖内で「？。？」と発言した場合
  *
- * @since 2020/08/24
  * @category jao Achievement
- *
+ * @since 2020/08/24
  */
 public class IDK implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

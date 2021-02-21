@@ -10,23 +10,22 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 /**
  * No. 53
- *
+ * <p>
  * ぼくのあたま！
  * 自分の頭を召喚する。
  * 「/head」とコマンドを入力した場合
  * ※隠し要素
  *
- * @since 2020/08/20
  * @category jao Achievement
- *
+ * @since 2020/08/20
  */
 public class MyHead implements Listener {
     @EventHandler(ignoreCancelled = true)
-    public void onHeadCommand(PlayerCommandPreprocessEvent event){
+    public void onHeadCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();
 
-        if(!message.equalsIgnoreCase("/head")){
+        if (!message.equalsIgnoreCase("/head")) {
             return;
         }
 

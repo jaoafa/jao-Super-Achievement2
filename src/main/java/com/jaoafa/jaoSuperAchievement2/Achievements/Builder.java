@@ -13,35 +13,34 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
  * No. 71
- *
+ * <p>
  * 建築家
  * 建築をする
  * ブロックを256個以上設置する
  *
- * @since 2020/10/10
  * @category jao Achievement
- *
+ * @since 2020/10/10
  */
 public class Builder implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnPlace(BlockPlaceEvent event){
+    public void OnPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
 
         int count = 0;
-        for(Material material : Material.values()){
-            try{
+        for (Material material : Material.values()) {
+            try {
                 count += player.getStatistic(Statistic.USE_ITEM, material);
-            }catch(Exception ignored){
+            } catch (Exception ignored) {
             }
         }
 
         count++; // イベント発生時には今回の分が入っていないので
 
-        if(count < 256){
+        if (count < 256) {
             return; // 256以下
         }
 
-        if(!Achievementjao.getAchievement(player, new AchievementType(71))){
+        if (!Achievementjao.getAchievement(player, new AchievementType(71))) {
             player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
         }
     }

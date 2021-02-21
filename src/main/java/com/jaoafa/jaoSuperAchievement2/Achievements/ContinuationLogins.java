@@ -20,25 +20,25 @@ import java.util.Date;
 
 /**
  * 継続したログインに対する実績
- *
+ * <p>
  * No. 60
- *
+ * <p>
  * 継続は力なり
  * jao鯖に1週間連続でログインする
  * jao鯖に7日連続でログインする(0時～24時を一日とする)
  * ※隠し要素
  *
- * @since 2020/08/20
  * @category jao Achievement
+ * @since 2020/08/20
  */
 public class ContinuationLogins implements Listener {
     @EventHandler
-    public void onLogin(PlayerLoginEvent event){
+    public void onLogin(PlayerLoginEvent event) {
         // この時点でSQLにログイン記録が入っているはず。login_successチェックはしない。
         Player player = event.getPlayer();
         int days = getContinuationDays(player);
         System.out.println("[ContinuationLogins] ContinuationLoginDays: " + days);
-        if(days >= 7){
+        if (days >= 7) {
             // 7日間以上ログイン
             if (!Achievementjao.getAchievement(player, new AchievementType(60))) {
                 player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
@@ -48,10 +48,11 @@ public class ContinuationLogins implements Listener {
 
     /**
      * 継続ログイン日数を取得する。
+     *
      * @param player プレイヤー
      * @return 継続ログイン日数
      */
-    private int getContinuationDays(Player player){
+    private int getContinuationDays(Player player) {
         MySQLDBManager sqlManager = Main.getMySQLDBManager();
         try {
             Connection conn = sqlManager.getConnection();
@@ -69,7 +70,7 @@ public class ContinuationLogins implements Listener {
                 statement.setString(3, day24);
                 ResultSet res = statement.executeQuery();
 
-                if(!res.next()){
+                if (!res.next()) {
                     res.close();
                     statement.close();
                     return i;
@@ -78,11 +79,12 @@ public class ContinuationLogins implements Listener {
             }
             statement.close();
             return 10;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             return 1;
         }
     }
-    private String formatDate(Date date){
+
+    private String formatDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
     }
