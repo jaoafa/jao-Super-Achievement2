@@ -1,29 +1,27 @@
-package com.jaoafa.jaosuperachievement2.Achievements_OLD;
+package com.jaoafa.jaosuperachievement2.achievements;
 
-import com.jaoafa.jaosuperachievement2.API.AchievementAPI;
-import com.jaoafa.jaosuperachievement2.API.Achievementjao;
-import com.jaoafa.jaosuperachievement2.Lib.AchievementType;
+import com.jaoafa.jaosuperachievement2.api.Achievementjao;
+import com.jaoafa.jaosuperachievement2.lib.Achievement;
+import com.jaoafa.jaosuperachievement2.lib.AchievementInterface;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
-/**
- * No. 81
- *
- * すべてのはじまり
- * 誤字からスタート
- * ログインしてからの第一声が「hai」だった場合
- * ※隠し要素
- *
- * @category jao Achievement
- * @since 2021/03/27
- */
-public class EverythingBegin implements Listener {
+public class EverythingBegin implements AchievementInterface, Listener {
+    @Override
+    public Achievement getAchievement() {
+        return Achievement.EVERYTHINGBEGIN;
+    }
+
     static Set<UUID> isSpoken = new HashSet<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -34,18 +32,19 @@ public class EverythingBegin implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnSpeak(AsyncPlayerChatEvent event) {
-        String message = event.getMessage();
+    public void OnChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        if(!isSpoken.contains(player.getUniqueId())){
+        Component component = event.message();
+        String message = PlainComponentSerializer.plain().serialize(component);
+
+        if (!isSpoken.contains(player.getUniqueId())) {
             return;
         }
         isSpoken.remove(player.getUniqueId());
-        if (!message.equals("hai")){
+        if (!message.equals("hai")) {
             return;
         }
-        if (!Achievementjao.getAchievement(player, new AchievementType(81))) {
-            player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-        }
+
+        Achievementjao.getAchievementAsync(player, getAchievement());
     }
 }
