@@ -25,7 +25,7 @@ import java.util.UUID;
  * @since 2020/04/06
  */
 public class FirstDed implements Listener {
-    List<UUID> JaoJao = new ArrayList<UUID>();
+    List<UUID> JaoJao = new ArrayList<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnSpeakjaojao(AsyncPlayerChatEvent event) {
@@ -51,7 +51,6 @@ public class FirstDed implements Listener {
 
         if (!Achievementjao.getAchievement(player, new AchievementType(25))) {
             player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-            return;
         }
     }
 }

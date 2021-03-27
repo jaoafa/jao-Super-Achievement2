@@ -25,7 +25,6 @@ public class NoTimeForSleep implements Listener {
         Player player = event.getPlayer();
         if (!Achievementjao.getAchievement(player, new AchievementType(24))) {
             player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-            return;
         }
     }
 }

@@ -30,7 +30,6 @@ public class Botch implements Listener {
         }
         if (!Achievementjao.getAchievement(player, new AchievementType(11))) {
             player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-            return;
         }
     }
 
@@ -55,7 +54,6 @@ public class Botch implements Listener {
         if (!Achievementjao.getAchievement(botch_player, new AchievementType(11))) {
             botch_player.sendMessage(AchievementAPI.getPrefix()
                     + "実績の解除中に問題が発生しました。もう一度お試しください。");
-            return;
         }
     }
 }

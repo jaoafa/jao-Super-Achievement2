@@ -34,7 +34,15 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
 		String nowVer = desc.getVersion();
 		Date nowVerDate = getVersionDate(nowVer);
 		String nowVerSha = getVersionSha(nowVer);
+        if(nowVerSha == null){
+            sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.AQUA + "現バージョンの取得に失敗しました。");
+            return true;
+        }
 		String latestVer = getVersion(desc.getName());
+		if(latestVer == null){
+            sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.AQUA + "最新バージョンの取得に失敗しました。");
+		    return true;
+        }
 		Date latestVerDate = getVersionDate(latestVer);
 		String latestVerSha = getLastCommitSha(desc.getName());
 
@@ -53,12 +61,6 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
 		} else if (nowVerDate.before(latestVerDate)) {
 			// 新しいバージョンあり
 			sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.RED + "現在導入されているバージョンよりも新しいバージョンがリリースされています。");
-			sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.AQUA + "導入バージョン: " + nowVer);
-			sender.sendMessage(
-					AchievementAPI.getPrefix() + ChatColor.AQUA + "最新バージョン: " + latestVer + " (" + latestVerSha + ")");
-		} else if (nowVerSha.equals(latestVerSha)) {
-			// shaがおなじ
-			sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.AQUA + "現在導入されているバージョンは最新です。(-)");
 			sender.sendMessage(AchievementAPI.getPrefix() + ChatColor.AQUA + "導入バージョン: " + nowVer);
 			sender.sendMessage(
 					AchievementAPI.getPrefix() + ChatColor.AQUA + "最新バージョン: " + latestVer + " (" + latestVerSha + ")");

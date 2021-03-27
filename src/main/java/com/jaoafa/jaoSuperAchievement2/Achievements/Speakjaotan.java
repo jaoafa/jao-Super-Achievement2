@@ -31,7 +31,6 @@ public class Speakjaotan implements Listener {
 
         if (!Achievementjao.getAchievement(player, new AchievementType(6))) {
             player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-            return;
         }
     }
 }

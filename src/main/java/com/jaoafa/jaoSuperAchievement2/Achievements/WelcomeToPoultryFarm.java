@@ -51,7 +51,6 @@ public class WelcomeToPoultryFarm implements Listener {
                 // どうせgetAchievement側ですでに取得してるかどうかは検査されるのでそのまま。
                 if (!Achievementjao.getAchievement(player, new AchievementType(30))) {
                     player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-                    return;
                 }
             }
         }.runTaskAsynchronously(Main.getJavaPlugin());

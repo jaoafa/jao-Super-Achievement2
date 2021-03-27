@@ -23,7 +23,6 @@ public class Discord {
 	 * @param channelId チャンネルID
 	 * @param content メッセージテキスト
 	 * @return 成功の場合true
-	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean sendMessage(String channelId, String content) {

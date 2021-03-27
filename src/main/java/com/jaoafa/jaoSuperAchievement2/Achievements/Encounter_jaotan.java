@@ -29,7 +29,6 @@ public class Encounter_jaotan implements Listener {
             if (args[0].equalsIgnoreCase("/tp") && args[1].equalsIgnoreCase("jaotan")) {
                 if (!Achievementjao.getAchievement(player, new AchievementType(7))) {
                     player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-                    return;
                 }
             }
         }

@@ -24,7 +24,7 @@ import java.util.*;
  * @since 2020/05/21
  */
 public class Silence implements Listener {
-    static List<UUID> Speaked = new ArrayList<UUID>();
+    static List<UUID> Speaked = new ArrayList<>();
     static Map<UUID, BukkitTask> SilenceTask = new HashMap<>();
 
     public static List<UUID> getSpeaked() {
@@ -44,9 +44,7 @@ public class Silence implements Listener {
     public void onJoinTask(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (Speaked.contains(player.getUniqueId())) {
-            Speaked.remove(player.getUniqueId());
-        }
+        Speaked.remove(player.getUniqueId());
         if (SilenceTask.containsKey(player.getUniqueId()) && !SilenceTask.get(player.getUniqueId()).isCancelled()) {
             SilenceTask.get(player.getUniqueId()).cancel();
             SilenceTask.remove(player.getUniqueId());

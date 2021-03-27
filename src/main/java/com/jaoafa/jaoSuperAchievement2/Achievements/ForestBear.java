@@ -51,7 +51,6 @@ public class ForestBear implements Listener {
 
         if (!Achievementjao.getAchievement(player, new AchievementType(9))) {
             player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-            return;
         }
     }
 }

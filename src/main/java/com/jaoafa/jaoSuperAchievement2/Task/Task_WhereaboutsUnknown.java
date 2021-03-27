@@ -26,7 +26,6 @@ public class Task_WhereaboutsUnknown extends BukkitRunnable {
 		}
 		if (!Achievementjao.getAchievement(player, new AchievementType(42))) {
 			player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-			return;
-		}
+        }
 	}
 }

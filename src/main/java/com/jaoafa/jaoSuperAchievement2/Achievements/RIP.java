@@ -30,7 +30,6 @@ public class RIP implements Listener {
             public void run() {
                 if (!Achievementjao.getAchievement(player, new AchievementType(38))) {
                     player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-                    return;
                 }
             }
         }.runTaskAsynchronously(Main.getJavaPlugin());

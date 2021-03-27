@@ -25,7 +25,7 @@ import java.util.*;
  * @since 2020/05/21
  */
 public class WhereaboutsUnknown implements Listener {
-    static List<UUID> Actioned = new ArrayList<UUID>();
+    static List<UUID> Actioned = new ArrayList<>();
     static Map<UUID, BukkitTask> WhereaboutsUnknownTask = new HashMap<>();
 
     public static List<UUID> getActioned() {
@@ -54,9 +54,7 @@ public class WhereaboutsUnknown implements Listener {
     public void onJoinTask(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (Actioned.contains(player.getUniqueId())) {
-            Actioned.remove(player.getUniqueId());
-        }
+        Actioned.remove(player.getUniqueId());
         if (WhereaboutsUnknownTask.containsKey(player.getUniqueId())
                 && !WhereaboutsUnknownTask.get(player.getUniqueId()).isCancelled()) {
             WhereaboutsUnknownTask.get(player.getUniqueId()).cancel();

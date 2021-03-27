@@ -37,18 +37,15 @@ public class MainTest {
 						// commandexecutor not implemented
 						System.out.println("! " + clazz.getSimpleName() + ": Listener not implemented [1]");
 						fail();
-						continue;
-					}
+                    }
 				} else {
 					System.out.println("! " + clazz.getSimpleName() + ": Listener not implemented [2]");
 					fail();
-					continue;
-				}
+                }
 			}
 		} catch (Exception e) { // ClassFinder.findClassesがそもそもException出すので仕方ないという判断で。
 			e.printStackTrace();
 			fail();
-			return;
-		}
+        }
 	}
 }

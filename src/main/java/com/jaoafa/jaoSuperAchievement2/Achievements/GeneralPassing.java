@@ -25,7 +25,7 @@ import java.util.UUID;
  * @since 2020/05/21
  */
 public class GeneralPassing implements Listener {
-    Map<UUID, Long> LoginTime = new HashMap<UUID, Long>();
+    Map<UUID, Long> LoginTime = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnJoin(PlayerJoinEvent event) {
