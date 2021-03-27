@@ -32,7 +32,7 @@ public class NuclearTest implements Listener {
         }
         Player player = (Player) event.getPlayer();
 
-        if(Arrays.stream(player.getInventory().getContents()).noneMatch(item -> item.getType() == Material.TNT)){
+        if(Arrays.stream(player.getInventory().getContents()).filter(Objects::nonNull).noneMatch(item -> item.getType() == Material.TNT)){
             return;
         }
 
