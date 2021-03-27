@@ -16,7 +16,7 @@ public class FirstJao implements AchievementInterface, Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnJoin(PlayerJoinEvent event){
+    public void OnJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         Achievementjao.getAchievementAsync(player, getAchievement());

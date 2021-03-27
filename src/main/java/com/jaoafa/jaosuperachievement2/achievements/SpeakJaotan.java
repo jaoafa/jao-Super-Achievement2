@@ -23,7 +23,7 @@ public class SpeakJaotan implements AchievementInterface, Listener {
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
 
-        if(!message.contains("jaotan")){
+        if (!message.contains("jaotan")) {
             return;
         }
 
