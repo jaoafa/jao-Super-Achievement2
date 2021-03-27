@@ -16,18 +16,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class EverythingBegin implements AchievementInterface, Listener {
+public class SpeakerOnlyAfa implements AchievementInterface, Listener {
+    Set<UUID> AlreadyJao = new HashSet<>();
+
     @Override
     public Achievement getAchievement() {
-        return Achievement.EVERYTHINGBEGIN;
-    }
-    static Set<UUID> isSpoken = new HashSet<>();
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnLogin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        isSpoken.add(player.getUniqueId());
+        return Achievement.SPEAKONLYAFA;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -36,14 +30,26 @@ public class EverythingBegin implements AchievementInterface, Listener {
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
 
-        if(!isSpoken.contains(player.getUniqueId())){
+        if (message.equals("jao")) {
+            AlreadyJao.add(player.getUniqueId());
             return;
         }
-        isSpoken.remove(player.getUniqueId());
-        if (!message.equals("hai")){
+
+        if (!message.equals("afa")) {
+            AlreadyJao.add(player.getUniqueId());
+            return;
+        }
+
+        if(AlreadyJao.contains(player.getUniqueId())){
             return;
         }
 
         Achievementjao.getAchievementAsync(player, getAchievement());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void OnJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        AlreadyJao.remove(player.getUniqueId());
     }
 }

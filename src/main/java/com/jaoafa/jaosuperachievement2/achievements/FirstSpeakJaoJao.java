@@ -10,24 +10,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class EverythingBegin implements AchievementInterface, Listener {
+public class FirstSpeakJaoJao implements AchievementInterface, Listener {
+    Map<UUID, Long> JaoJaoTime = new HashMap<>();
+
     @Override
     public Achievement getAchievement() {
-        return Achievement.EVERYTHINGBEGIN;
-    }
-    static Set<UUID> isSpoken = new HashSet<>();
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnLogin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        isSpoken.add(player.getUniqueId());
+        return Achievement.FIRSTSPEAKJAOJAO;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -35,12 +29,22 @@ public class EverythingBegin implements AchievementInterface, Listener {
         Player player = event.getPlayer();
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
-
-        if(!isSpoken.contains(player.getUniqueId())){
+        if (!message.equals("jaojao")) {
             return;
         }
-        isSpoken.remove(player.getUniqueId());
-        if (!message.equals("hai")){
+
+        JaoJaoTime.put(player.getUniqueId(), System.currentTimeMillis() / 1000L);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void OnQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+
+        if (!JaoJaoTime.containsKey(player.getUniqueId())) {
+            return;
+        }
+
+        if (((System.currentTimeMillis() / 1000L) - JaoJaoTime.get(player.getUniqueId())) > 10) {
             return;
         }
 

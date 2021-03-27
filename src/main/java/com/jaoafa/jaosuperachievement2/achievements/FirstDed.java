@@ -10,24 +10,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class EverythingBegin implements AchievementInterface, Listener {
+public class FirstDed implements AchievementInterface, Listener {
+    List<UUID> JaoJao = new ArrayList<>();
+
     @Override
     public Achievement getAchievement() {
-        return Achievement.EVERYTHINGBEGIN;
-    }
-    static Set<UUID> isSpoken = new HashSet<>();
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnLogin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        isSpoken.add(player.getUniqueId());
+        return Achievement.FIRSTDED;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -36,11 +30,21 @@ public class EverythingBegin implements AchievementInterface, Listener {
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
 
-        if(!isSpoken.contains(player.getUniqueId())){
+        if (!message.equals("jaojao")) {
             return;
         }
-        isSpoken.remove(player.getUniqueId());
-        if (!message.equals("hai")){
+
+        if (!JaoJao.contains(player.getUniqueId())) {
+            JaoJao.add(player.getUniqueId());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void OnQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+
+        if (JaoJao.contains(player.getUniqueId())) {
+            JaoJao.remove(player.getUniqueId());
             return;
         }
 

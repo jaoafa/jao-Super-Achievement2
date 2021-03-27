@@ -1,14 +1,18 @@
-package com.jaoafa.jaosuperachievement2.achievements;
+package com.jaoafa.jaosuperachievement2.Achievements;
 
-import com.jaoafa.jaosuperachievement2.api.Achievementjao;
-import com.jaoafa.jaosuperachievement2.lib.Achievement;
-import com.jaoafa.jaosuperachievement2.lib.AchievementInterface;
+import com.jaoafa.jaosuperachievement2.API.AchievementAPI;
+import com.jaoafa.jaosuperachievement2.API.Achievementjao;
+import com.jaoafa.jaosuperachievement2.Lib.Achievement;
+import com.jaoafa.jaosuperachievement2.Lib.AchievementInterface;
+import com.jaoafa.jaosuperachievement2.Lib.AchievementType;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;

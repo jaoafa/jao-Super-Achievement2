@@ -13,14 +13,14 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class Mask implements AchievementInterface, Listener {
+public class WhoIsTheBear implements AchievementInterface, Listener {
     @Override
     public Achievement getAchievement() {
-        return Achievement.MASK;
+        return Achievement.WHOISTHEBEAR;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnMASK(InventoryCloseEvent event) { // インベントリを閉じたとき
+    public void OnClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) {
             return;
         }
@@ -39,7 +39,22 @@ public class Mask implements AchievementInterface, Listener {
             return;
         }
 
-        if (!offplayer.getUniqueId().toString().equalsIgnoreCase("26728d53-add7-46d1-97c3-0a25bc6607f5")) {
+        if (!offplayer.getUniqueId().toString().equals("32ff7cdc-a1b4-450a-aa7e-6af75fe8c37c")) {
+            return;
+        }
+
+        ItemStack chestplate = player.getInventory().getChestplate();
+        if (chestplate == null || chestplate.getType() != Material.LEATHER_CHESTPLATE) {
+            return;
+        }
+
+        ItemStack leggings = player.getInventory().getLeggings();
+        if (leggings == null || leggings.getType() != Material.LEATHER_LEGGINGS) {
+            return;
+        }
+
+        ItemStack boots = player.getInventory().getBoots();
+        if (boots == null || boots.getType() != Material.LEATHER_BOOTS) {
             return;
         }
 

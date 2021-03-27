@@ -39,7 +39,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.jaoafa.jaoSuperAchievement2.Main</mainClass>
+							<mainClass>com.jaoafa.jaosuperachievement2.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

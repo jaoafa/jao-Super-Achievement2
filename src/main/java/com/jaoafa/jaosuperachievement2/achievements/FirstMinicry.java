@@ -10,24 +10,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
-public class EverythingBegin implements AchievementInterface, Listener {
+public class FirstMinicry implements AchievementInterface, Listener {
+    String OldMessage = null;
+    UUID OldPlayerUUID = null;
+
     @Override
     public Achievement getAchievement() {
-        return Achievement.EVERYTHINGBEGIN;
-    }
-    static Set<UUID> isSpoken = new HashSet<>();
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnLogin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        isSpoken.add(player.getUniqueId());
+        return Achievement.FIRSTMIMICRY;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -36,14 +28,21 @@ public class EverythingBegin implements AchievementInterface, Listener {
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
 
-        if(!isSpoken.contains(player.getUniqueId())){
+        if (!message.equals(OldMessage)) {
+            OldMessage = message;
+            OldPlayerUUID = player.getUniqueId();
             return;
         }
-        isSpoken.remove(player.getUniqueId());
-        if (!message.equals("hai")){
+
+        if (OldPlayerUUID.equals(player.getUniqueId())) {
+            OldMessage = message;
+            OldPlayerUUID = player.getUniqueId();
             return;
         }
 
         Achievementjao.getAchievementAsync(player, getAchievement());
+
+        OldMessage = message;
+        OldPlayerUUID = player.getUniqueId();
     }
 }

@@ -13,14 +13,14 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class Mask implements AchievementInterface, Listener {
+public class EggCovered implements AchievementInterface, Listener {
     @Override
     public Achievement getAchievement() {
-        return Achievement.MASK;
+        return Achievement.EGGCOVERED;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnMASK(InventoryCloseEvent event) { // インベントリを閉じたとき
+    public void OnEggCovered(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) {
             return;
         }
@@ -39,7 +39,7 @@ public class Mask implements AchievementInterface, Listener {
             return;
         }
 
-        if (!offplayer.getUniqueId().toString().equalsIgnoreCase("26728d53-add7-46d1-97c3-0a25bc6607f5")) {
+        if (!offplayer.getUniqueId().toString().equalsIgnoreCase("7008531a-539b-4dfc-8b81-7b267d18dd0a")) {
             return;
         }
 

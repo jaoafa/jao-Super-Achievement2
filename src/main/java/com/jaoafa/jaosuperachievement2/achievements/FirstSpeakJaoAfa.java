@@ -10,24 +10,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class EverythingBegin implements AchievementInterface, Listener {
+public class FirstSpeakJaoAfa implements AchievementInterface, Listener {
+    Set<UUID> isSpeakedJao = new HashSet<>();
+
     @Override
     public Achievement getAchievement() {
-        return Achievement.EVERYTHINGBEGIN;
-    }
-    static Set<UUID> isSpoken = new HashSet<>();
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnLogin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        isSpoken.add(player.getUniqueId());
+        return Achievement.FIRSTSPEAKJAOAFA;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -36,14 +29,15 @@ public class EverythingBegin implements AchievementInterface, Listener {
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
 
-        if(!isSpoken.contains(player.getUniqueId())){
-            return;
+        if(message.equals("jao")){
+            // jaoをしゃべった場合追加
+            isSpeakedJao.add(player.getUniqueId());
+        }else if(message.equals("afa") && isSpeakedJao.contains(player.getUniqueId())){
+            // 前回jaoをしゃべっていてafaとしゃべった場合
+            Achievementjao.getAchievementAsync(player, getAchievement());
+        }else{
+            // それ以外の場合はjaoをしゃべっていないことにする
+            isSpeakedJao.remove(player.getUniqueId());
         }
-        isSpoken.remove(player.getUniqueId());
-        if (!message.equals("hai")){
-            return;
-        }
-
-        Achievementjao.getAchievementAsync(player, getAchievement());
     }
 }

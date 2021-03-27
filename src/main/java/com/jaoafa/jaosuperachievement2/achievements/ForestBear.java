@@ -1,5 +1,4 @@
 package com.jaoafa.jaosuperachievement2.achievements;
-
 import com.jaoafa.jaosuperachievement2.api.Achievementjao;
 import com.jaoafa.jaosuperachievement2.lib.Achievement;
 import com.jaoafa.jaosuperachievement2.lib.AchievementInterface;
@@ -13,14 +12,14 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class Mask implements AchievementInterface, Listener {
+public class ForestBear implements AchievementInterface, Listener {
     @Override
     public Achievement getAchievement() {
-        return Achievement.MASK;
+        return Achievement.FORESTBEAR;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnMASK(InventoryCloseEvent event) { // インベントリを閉じたとき
+    public void OnClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) {
             return;
         }
@@ -32,6 +31,7 @@ public class Mask implements AchievementInterface, Listener {
         if (helmet.getType() != Material.PLAYER_HEAD) {
             return;
         }
+
         SkullMeta skull = (SkullMeta) helmet.getItemMeta();
         OfflinePlayer offplayer = skull.getOwningPlayer();
 
@@ -39,7 +39,7 @@ public class Mask implements AchievementInterface, Listener {
             return;
         }
 
-        if (!offplayer.getUniqueId().toString().equalsIgnoreCase("26728d53-add7-46d1-97c3-0a25bc6607f5")) {
+        if (!offplayer.getUniqueId().toString().equalsIgnoreCase("32ff7cdc-a1b4-450a-aa7e-6af75fe8c37c")) {
             return;
         }
 

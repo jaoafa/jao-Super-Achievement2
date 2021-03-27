@@ -13,14 +13,14 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class Mask implements AchievementInterface, Listener {
+public class Become3YearsOld implements AchievementInterface, Listener {
     @Override
     public Achievement getAchievement() {
-        return Achievement.MASK;
+        return Achievement.BECOME3YEARSOLD;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnMASK(InventoryCloseEvent event) { // インベントリを閉じたとき
+    public void OnBecome3YearsOld(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) {
             return;
         }
@@ -39,7 +39,7 @@ public class Mask implements AchievementInterface, Listener {
             return;
         }
 
-        if (!offplayer.getUniqueId().toString().equalsIgnoreCase("26728d53-add7-46d1-97c3-0a25bc6607f5")) {
+        if (!offplayer.getUniqueId().toString().equalsIgnoreCase("0ad34a33-3ca4-4c86-84f3-a4591920b06a")) {
             return;
         }
 

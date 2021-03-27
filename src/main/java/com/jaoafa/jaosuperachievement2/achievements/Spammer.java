@@ -10,25 +10,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class EverythingBegin implements AchievementInterface, Listener {
+public class Spammer implements AchievementInterface, Listener {
     @Override
     public Achievement getAchievement() {
-        return Achievement.EVERYTHINGBEGIN;
+        return Achievement.SPAMMER;
     }
-    static Set<UUID> isSpoken = new HashSet<>();
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void OnLogin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        isSpoken.add(player.getUniqueId());
-    }
+    Map<UUID, String> map = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnChat(AsyncChatEvent event) {
@@ -36,14 +29,13 @@ public class EverythingBegin implements AchievementInterface, Listener {
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
 
-        if(!isSpoken.contains(player.getUniqueId())){
-            return;
-        }
-        isSpoken.remove(player.getUniqueId());
-        if (!message.equals("hai")){
-            return;
+        if (map.containsKey(player.getUniqueId())) {
+            String oldMessage = map.get(player.getUniqueId());
+            if (oldMessage.equals(message)) {
+                Achievementjao.getAchievementAsync(player, getAchievement());
+            }
         }
 
-        Achievementjao.getAchievementAsync(player, getAchievement());
+        map.put(player.getUniqueId(), message);
     }
 }
