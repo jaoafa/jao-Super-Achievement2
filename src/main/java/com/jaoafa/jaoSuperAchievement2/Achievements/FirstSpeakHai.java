@@ -22,6 +22,7 @@ import java.util.UUID;
  * 逆jao語
  * 誤字を誤字する。
  * "hai"と発言する
+ * ※隠し要素
  *
  * @category jao Achievement
  * @since 2021/03/27
