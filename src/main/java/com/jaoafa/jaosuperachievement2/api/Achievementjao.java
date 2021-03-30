@@ -32,13 +32,19 @@ public class Achievementjao {
 	static private final Random rand = new Random();
 
 	public static void getAchievementAsync(Player player, Achievement achievement){
+        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
+            return;
+        }
         new BukkitRunnable() {
             public void run() {
                 Achievementjao.getAchievement(player, achievement);
             }
         }.runTaskAsynchronously(Main.getJavaPlugin());
     }
-    public static void getAchievementAsync(OfflinePlayer player, Achievement achievement){
+    public static void getAchievementAsync(OfflinePlayer player, Achievement achievement) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
+            return;
+        }
         new BukkitRunnable() {
             public void run() {
                 Achievementjao.getAchievement(player, achievement);
@@ -48,16 +54,19 @@ public class Achievementjao {
 
     @Deprecated
 	public static void getAchievement(Player player, Achievement achievement) {
-		if (isAlreadyGettedAchievement(player, achievement)) {
-			return;
-		}
+        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
+            return;
+        }
+        if (isAlreadyGettedAchievement(player, achievement)) {
+            return;
+        }
 
-		try {
-			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
-			Connection conn = sqlmanager.getConnection();
+        try {
+            MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+            Connection conn = sqlmanager.getConnection();
 
-			PreparedStatement statement = conn.prepareStatement(
-					"INSERT INTO jaoSuperAchievement2 (player, uuid, achievementid) VALUES (?, ?, ?);");
+            PreparedStatement statement = conn.prepareStatement(
+                "INSERT INTO jaoSuperAchievement2 (player, uuid, achievementid) VALUES (?, ?, ?);");
 			statement.setString(1, player.getName());
 			statement.setString(2, player.getUniqueId().toString());
 			statement.setInt(3, achievement.getId());
@@ -108,16 +117,19 @@ public class Achievementjao {
     }
 
 	public static void getAchievement(OfflinePlayer offplayer, Achievement achievement) {
-		if (isAlreadyGettedAchievement(offplayer, achievement)) {
-			return;
-		}
+        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
+            return;
+        }
+        if (isAlreadyGettedAchievement(offplayer, achievement)) {
+            return;
+        }
 
-		try {
-			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
-			Connection conn = sqlmanager.getConnection();
+        try {
+            MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+            Connection conn = sqlmanager.getConnection();
 
-			PreparedStatement statement = conn.prepareStatement(
-					"INSERT INTO jaoSuperAchievement2 (player, uuid, achievementid) VALUES (?, ?, ?);");
+            PreparedStatement statement = conn.prepareStatement(
+                "INSERT INTO jaoSuperAchievement2 (player, uuid, achievementid) VALUES (?, ?, ?);");
 			statement.setString(1, offplayer.getName());
 			statement.setString(2, offplayer.getUniqueId().toString());
 			statement.setInt(3, achievement.getId());
