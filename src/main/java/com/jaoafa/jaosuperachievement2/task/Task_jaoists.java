@@ -14,11 +14,11 @@ public class Task_jaoists extends BukkitRunnable {
     Map<Achievement, Integer> achievements = new HashMap<>();
 
     {
-        achievements.put(Achievement.NORMALJAOIST, 3600);
-        achievements.put(Achievement.SINCERITYJAOIST, 86400);
-        achievements.put(Achievement.SUPERJAOIST, 604800);
-        achievements.put(Achievement.CHARISMAJAOIST, 2592000);
-        achievements.put(Achievement.FOREVERJAOEST, 8640000);
+        achievements.put(Achievement.NORMALJAOIST, 60);
+        achievements.put(Achievement.SINCERITYJAOIST, 1440);
+        achievements.put(Achievement.SUPERJAOIST, 10080);
+        achievements.put(Achievement.CHARISMAJAOIST, 43200);
+        achievements.put(Achievement.FOREVERJAOEST, 144000);
     }
 
     @Override
