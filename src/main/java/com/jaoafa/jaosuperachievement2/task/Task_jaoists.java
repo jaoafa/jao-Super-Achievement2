@@ -14,22 +14,22 @@ public class Task_jaoists extends BukkitRunnable {
     Map<Achievement, Integer> achievements = new HashMap<>();
 
     {
-        achievements.put(Achievement.NORMALJAOIST, 60);
-        achievements.put(Achievement.SINCERITYJAOIST, 1440);
-        achievements.put(Achievement.SUPERJAOIST, 10080);
-        achievements.put(Achievement.CHARISMAJAOIST, 43200);
-        achievements.put(Achievement.FOREVERJAOEST, 144000);
+        achievements.put(Achievement.NORMALJAOIST, 3600); // 1時間 = 3600秒
+        achievements.put(Achievement.SINCERITYJAOIST, 86400); // 1日 = 86400秒
+        achievements.put(Achievement.SUPERJAOIST, 604800); // 1週 = 604800秒
+        achievements.put(Achievement.CHARISMAJAOIST, 2592000); // 1ヶ月 = 2592000秒
+        achievements.put(Achievement.FOREVERJAOEST, 8640000); // 100日 = 8640000秒
     }
 
     @Override
     public void run() {
         for(Player player: Bukkit.getOnlinePlayers()){
-            for(Map.Entry<Achievement, Integer> entry: achievements.entrySet()){
+            for(Map.Entry<Achievement, Integer> entry: achievements.entrySet()) {
                 Achievement achievement = entry.getKey();
-                int onlineGameTick = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
-                int borderGameTick = entry.getValue();
+                int onlineGameSec = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20;
+                int borderGameSec = entry.getValue();
 
-                if(onlineGameTick < borderGameTick){
+                if (onlineGameSec < borderGameSec) {
                     return; // オンライン時間が、ボーダー時間内だったらリターン
                 }
 

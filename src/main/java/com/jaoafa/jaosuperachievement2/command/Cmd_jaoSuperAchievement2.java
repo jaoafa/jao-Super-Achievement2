@@ -13,6 +13,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,13 +24,13 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		PluginDescriptionFile desc = Main.getJavaPlugin().getDescription();
-		String nowVer = desc.getVersion();
-		Date nowVerDate = getVersionDate(nowVer);
-		String nowVerSha = getVersionSha(nowVer);
-        if(nowVerSha == null){
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        PluginDescriptionFile desc = Main.getJavaPlugin().getDescription();
+        String nowVer = desc.getVersion();
+        Date nowVerDate = getVersionDate(nowVer);
+        String nowVerSha = getVersionSha(nowVer);
+        if (nowVerSha == null) {
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("現バージョンの取得に失敗しました。", NamedTextColor.AQUA)
@@ -129,23 +130,23 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
 	private List<String> getCommits(String repo) {
 		LinkedList<String> ret = new LinkedList<>();
 		try {
-			String url = "https://api.github.com/repos/jaoafa/" + repo + "/commits";
-			OkHttpClient client = new OkHttpClient();
-			Request request = new Request.Builder().url(url).get().build();
-			Response response = client.newCall(request).execute();
-			if (response.code() != 200) {
-				return null;
-			}
-			JSONArray array = new JSONArray(response.body().string());
-			response.close();
+            String url = "https://api.github.com/repos/jaoafa/" + repo + "/commits";
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(url).get().build();
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200) {
+                return null;
+            }
+            JSONArray array = new JSONArray(Objects.requireNonNull(response.body()).string());
+            response.close();
 
-			for (int i = 0; i < array.length() && i < 5; i++) {
-				JSONObject obj = array.getJSONObject(i).getJSONObject("commit");
-				Date date = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT
-						.parse(obj.getJSONObject("committer").getString("date"));
-				String sha = array.getJSONObject(i).getString("sha").substring(0, 7);
-				ret.add("[" + sdfFormat(date) + "|" + sha + "] " + obj.getString("message"));
-			}
+            for (int i = 0; i < array.length() && i < 5; i++) {
+                JSONObject obj = array.getJSONObject(i).getJSONObject("commit");
+                Date date = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT
+                    .parse(obj.getJSONObject("committer").getString("date"));
+                String sha = array.getJSONObject(i).getString("sha").substring(0, 7);
+                ret.add("[" + sdfFormat(date) + "|" + sha + "] " + obj.getString("message"));
+            }
 
 			return ret;
 		} catch (IOException | JSONException | ParseException e) {
@@ -197,21 +198,21 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
 
 	private String getVersion(String repo) {
 		try {
-			String url = "https://raw.githubusercontent.com/jaoafa/" + repo + "/master/src/main/resources/plugin.yml";
-			OkHttpClient client = new OkHttpClient();
-			Request request = new Request.Builder().url(url).get().build();
-			Response response = client.newCall(request).execute();
-			if (response.code() != 200) {
-				return null;
-			}
-			YamlConfiguration yaml = YamlConfiguration.loadConfiguration(response.body().charStream());
-			response.close();
-			if (yaml.contains("version")) {
-				return yaml.getString("version");
-			} else {
-				return null;
-			}
-		} catch (IOException e) {
+            String url = "https://raw.githubusercontent.com/jaoafa/" + repo + "/master/src/main/resources/plugin.yml";
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(url).get().build();
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200) {
+                return null;
+            }
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(Objects.requireNonNull(response.body()).charStream());
+            response.close();
+            if (yaml.contains("version")) {
+                return yaml.getString("version");
+            } else {
+                return null;
+            }
+        } catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
