@@ -10,9 +10,9 @@ public class AchievementAPI {
 	 */
 	public static Component getPrefix() {
 	    return Component.text().append(
-	        Component.text("["),
+            Component.text("["),
             getjaoSuperAchievement(),
-            Component.text(" "),
+            Component.text("]"),
             Component.space()
         ).build();
 	}
