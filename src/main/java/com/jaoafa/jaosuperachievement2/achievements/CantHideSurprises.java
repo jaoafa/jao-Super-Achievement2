@@ -22,6 +22,9 @@ public class CantHideSurprises implements AchievementInterface, Listener {
         Player player = event.getPlayer();
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
+        if (!message.equals("maj?")) {
+            return;
+        }
 
         Achievementjao.getAchievementAsync(player, getAchievement());
     }
