@@ -22,25 +22,16 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Achievementjao {
-	static private final FireworkEffect.Type[] types = {
-			Type.BALL,
-			Type.BALL_LARGE,
-			Type.BURST,
-			Type.CREEPER,
-			Type.STAR,
-	};
-	static private final Random rand = new Random();
+    static private final FireworkEffect.Type[] types = {
+        Type.BALL,
+        Type.BALL_LARGE,
+        Type.BURST,
+        Type.CREEPER,
+        Type.STAR,
+    };
+    static private final Random rand = new Random();
+    static Map<UUID, List<Integer>> GettedAchievementCache = new HashMap<>(); // uuid, AchievementID
 
-	public static void getAchievementAsync(Player player, Achievement achievement){
-        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
-            return;
-        }
-        new BukkitRunnable() {
-            public void run() {
-                Achievementjao.getAchievement(player, achievement);
-            }
-        }.runTaskAsynchronously(Main.getJavaPlugin());
-    }
     public static void getAchievementAsync(OfflinePlayer player, Achievement achievement) {
         if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
             return;
@@ -52,8 +43,19 @@ public class Achievementjao {
         }.runTaskAsynchronously(Main.getJavaPlugin());
     }
 
+    public static void getAchievementAsync(Player player, Achievement achievement) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
+            return;
+        }
+        new BukkitRunnable() {
+            public void run() {
+                Achievementjao.getAchievement(player, achievement);
+            }
+        }.runTaskAsynchronously(Main.getJavaPlugin());
+    }
+
     @Deprecated
-	public static void getAchievement(Player player, Achievement achievement) {
+    public static void getAchievement(Player player, Achievement achievement) {
         if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
             return;
         }
@@ -67,18 +69,18 @@ public class Achievementjao {
 
             PreparedStatement statement = conn.prepareStatement(
                 "INSERT INTO jaoSuperAchievement2 (player, uuid, achievementid) VALUES (?, ?, ?);");
-			statement.setString(1, player.getName());
-			statement.setString(2, player.getUniqueId().toString());
-			statement.setInt(3, achievement.getId());
-			statement.executeUpdate();
-			statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
-			return;
-		}
+            statement.setString(1, player.getName());
+            statement.setString(2, player.getUniqueId().toString());
+            statement.setInt(3, achievement.getId());
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            player.sendMessage(AchievementAPI.getPrefix() + "実績の解除中に問題が発生しました。もう一度お試しください。");
+            return;
+        }
 
-		int gettedPlayerCount = getGettedPlayerCount(achievement.getId());
+        int gettedPlayerCount = getGettedPlayerCount(achievement.getId());
 
         Bukkit.getServer().sendMessage(Component.text().append(
             AchievementAPI.getPrefix(),
@@ -88,12 +90,12 @@ public class Achievementjao {
             Component.text(achievement.getTitle()),
             Component.text(String.format("」を取得しました！（%d人目）", gettedPlayerCount))
         ));
-		Main.getDiscord().sendMessage("597423199227084800",
-				"**[jaoSuperAchievement2]** " + DiscordEscape(player.getName()) + "が「" + DiscordEscape(achievement.getTitle())
-						+ "」を取得しました！ (" + gettedPlayerCount + "人目)");
+        Main.getDiscord().sendMessage("597423199227084800",
+            "**[jaoSuperAchievement2]** " + DiscordEscape(player.getName()) + "が「" + DiscordEscape(achievement.getTitle())
+                + "」を取得しました！ (" + gettedPlayerCount + "人目)");
 
-		new BukkitRunnable() {
-			public void run() {
+        new BukkitRunnable() {
+            public void run() {
                 jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(player, achievement);
                 Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
 
@@ -112,10 +114,10 @@ public class Achievementjao {
                 firework.setFireworkMeta(meta);
                 firework.detonate();
             }
-		}.runTaskLater(Main.getJavaPlugin(), 1);
+        }.runTaskLater(Main.getJavaPlugin(), 1);
     }
 
-	public static void getAchievement(OfflinePlayer offplayer, Achievement achievement) {
+    public static void getAchievement(OfflinePlayer offplayer, Achievement achievement) {
         if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
             return;
         }
@@ -129,102 +131,104 @@ public class Achievementjao {
 
             PreparedStatement statement = conn.prepareStatement(
                 "INSERT INTO jaoSuperAchievement2 (player, uuid, achievementid) VALUES (?, ?, ?);");
-			statement.setString(1, offplayer.getName());
-			statement.setString(2, offplayer.getUniqueId().toString());
-			statement.setInt(3, achievement.getId());
-			statement.executeUpdate();
-			statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return;
-		}
+            statement.setString(1, offplayer.getName());
+            statement.setString(2, offplayer.getUniqueId().toString());
+            statement.setInt(3, achievement.getId());
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
 
-		int gettedPlayerCount = getGettedPlayerCount(achievement.getId());
+        int gettedPlayerCount = getGettedPlayerCount(achievement.getId());
 
-		Bukkit.getServer().sendMessage(Component.text().append(
-		    AchievementAPI.getPrefix(),
+        Bukkit.getServer().sendMessage(Component.text().append(
+            AchievementAPI.getPrefix(),
             Component.text(offplayer.getName() != null ? offplayer.getName() : offplayer.getUniqueId().toString()),
             Component.space(),
             Component.text("が「"),
             Component.text(achievement.getTitle()),
             Component.text(String.format("」を取得しました！（%d）人目", gettedPlayerCount))
         ));
-		Main.getDiscord().sendMessage("597423199227084800",
-				"**[jaoSuperAchievement2]** " + DiscordEscape(offplayer.getName()) + "が「"
-						+ DiscordEscape(achievement.getTitle()) + "」を取得しました！ (" + gettedPlayerCount + "人目)");
+        Main.getDiscord().sendMessage("597423199227084800",
+            "**[jaoSuperAchievement2]** " + DiscordEscape(offplayer.getName()) + "が「"
+                + DiscordEscape(achievement.getTitle()) + "」を取得しました！ (" + gettedPlayerCount + "人目)");
 
-		jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(offplayer, achievement);
-		Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
+        new BukkitRunnable() {
+            public void run() {
+                jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(offplayer, achievement);
+                Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
+            }
+        }.runTaskLater(Main.getJavaPlugin(), 1);
     }
 
-	static Map<UUID, List<Integer>> GettedAchievementCache = new HashMap<>(); // uuid, AchievementID
+    public static boolean isAlreadyGettedAchievement(OfflinePlayer player, Achievement achievement) {
+        if (GettedAchievementCache.containsKey(player.getUniqueId())) {
+            List<Integer> gettedList = GettedAchievementCache.get(player.getUniqueId());
+            if (gettedList.contains(achievement.getId())) {
+                return true;
+            }
+        }
+        try {
+            MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+            Connection conn = sqlmanager.getConnection();
 
-	public static boolean isAlreadyGettedAchievement(OfflinePlayer player, Achievement achievement) {
-		if (GettedAchievementCache.containsKey(player.getUniqueId())) {
-			List<Integer> gettedList = GettedAchievementCache.get(player.getUniqueId());
-			if (gettedList.contains(achievement.getId())) {
-				return true;
-			}
-		}
-		try {
-			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
-			Connection conn = sqlmanager.getConnection();
-
-			PreparedStatement statement = conn.prepareStatement(
-					"SELECT * FROM jaoSuperAchievement2 WHERE uuid = ? AND achievementid = ?");
-			statement.setString(1, player.getUniqueId().toString());
-			statement.setInt(2, achievement.getId());
-			ResultSet res = statement.executeQuery();
-			if (res.next()) {
-				if (GettedAchievementCache.containsKey(player.getUniqueId())) {
-					List<Integer> gettedList = GettedAchievementCache.get(player.getUniqueId());
-					gettedList.add(achievement.getId());
-					GettedAchievementCache.put(player.getUniqueId(), gettedList);
-				} else {
-					List<Integer> gettedList = new ArrayList<>();
-					gettedList.add(achievement.getId());
-					GettedAchievementCache.put(player.getUniqueId(), gettedList);
-				}
-				res.close();
-				statement.close();
-				return true;
-			} else {
-				res.close();
-				statement.close();
-				return false;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+            PreparedStatement statement = conn.prepareStatement(
+                "SELECT * FROM jaoSuperAchievement2 WHERE uuid = ? AND achievementid = ?");
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setInt(2, achievement.getId());
+            ResultSet res = statement.executeQuery();
+            if (res.next()) {
+                if (GettedAchievementCache.containsKey(player.getUniqueId())) {
+                    List<Integer> gettedList = GettedAchievementCache.get(player.getUniqueId());
+                    gettedList.add(achievement.getId());
+                    GettedAchievementCache.put(player.getUniqueId(), gettedList);
+                } else {
+                    List<Integer> gettedList = new ArrayList<>();
+                    gettedList.add(achievement.getId());
+                    GettedAchievementCache.put(player.getUniqueId(), gettedList);
+                }
+                res.close();
+                statement.close();
+                return true;
+            } else {
+                res.close();
+                statement.close();
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
-		}
-	}
+        }
+    }
 
-	static int getGettedPlayerCount(int id) {
-		try {
-			MySQLDBManager sqlmanager = Main.getMySQLDBManager();
-			Connection conn = sqlmanager.getConnection();
+    static int getGettedPlayerCount(int id) {
+        try {
+            MySQLDBManager sqlmanager = Main.getMySQLDBManager();
+            Connection conn = sqlmanager.getConnection();
 
-			PreparedStatement statement = conn
-					.prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2 WHERE achievementid = ?;");
-			statement.setInt(1, id);
-			ResultSet res = statement.executeQuery();
-			if (res.next()) {
-				int ret = res.getInt(1);
-				res.close();
-				statement.close();
-				return ret;
-			} else {
-				res.close();
-				statement.close();
-				return 0;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return 0;
-		}
-	}
+            PreparedStatement statement = conn
+                .prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2 WHERE achievementid = ?;");
+            statement.setInt(1, id);
+            ResultSet res = statement.executeQuery();
+            if (res.next()) {
+                int ret = res.getInt(1);
+                res.close();
+                statement.close();
+                return ret;
+            } else {
+                res.close();
+                statement.close();
+                return 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
-	static String DiscordEscape(String text) {
-		return text == null ? "" : text.replace("_", "\\_").replace("*", "\\*").replace("~", "\\~");
-	}
+    static String DiscordEscape(String text) {
+        return text == null ? "" : text.replace("_", "\\_").replace("*", "\\*").replace("~", "\\~");
+    }
 }
