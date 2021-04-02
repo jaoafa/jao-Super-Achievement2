@@ -33,7 +33,7 @@ public class Botch implements AchievementInterface, Listener {
             return;
         }
         Optional<? extends Player> player = Bukkit.getServer().getOnlinePlayers().stream()
-            .filter(p -> p.getUniqueId() == event.getPlayer().getUniqueId())
+            .filter(p -> p.getUniqueId() != event.getPlayer().getUniqueId())
             .findFirst();
 
         if (!player.isPresent()) {
