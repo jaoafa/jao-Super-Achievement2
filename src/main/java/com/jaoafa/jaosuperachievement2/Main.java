@@ -42,9 +42,9 @@ public class Main extends JavaPlugin {
 
 	private void LoadjaoAchievements() {
 		try {
-			ClassFinder classFinder = new ClassFinder(this.getClassLoader());
-			for (Class<?> clazz : classFinder.findClasses("com.jaoafa.jaosuperachievement2.achievement")) {
-                if (!clazz.getName().startsWith("com.jaoafa.jaosuperachievement2.achievement.")) {
+            ClassFinder classFinder = new ClassFinder(this.getClassLoader());
+            for (Class<?> clazz : classFinder.findClasses("com.jaoafa.jaosuperachievement2.achievements")) {
+                if (!clazz.getName().startsWith("com.jaoafa.jaosuperachievement2.achievements.")) {
                     continue;
                 }
                 if (clazz.getEnclosingClass() != null) {

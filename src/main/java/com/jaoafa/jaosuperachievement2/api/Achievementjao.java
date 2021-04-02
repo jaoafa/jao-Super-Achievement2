@@ -92,27 +92,26 @@ public class Achievementjao {
 				"**[jaoSuperAchievement2]** " + DiscordEscape(player.getName()) + "が「" + DiscordEscape(achievement.getTitle())
 						+ "」を取得しました！ (" + gettedPlayerCount + "人目)");
 
-
-		jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(player, achievement);
-		Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
-
 		new BukkitRunnable() {
 			public void run() {
-				Firework firework = player.getLocation().getWorld().spawn(player.getLocation().add(0, 3, 0),
-						Firework.class);
-				FireworkMeta meta = firework.getFireworkMeta();
-				Builder effect = FireworkEffect.builder();
-				effect.with(types[rand.nextInt(types.length)]);
-				effect.withColor(Color.RED, Color.AQUA, Color.YELLOW, Color.GREEN, Color.LIME, Color.ORANGE,
-						Color.PURPLE);
-				effect.withFade(Color.RED, Color.AQUA, Color.YELLOW, Color.GREEN, Color.LIME, Color.ORANGE,
-						Color.PURPLE);
-				effect.flicker(true);
-				meta.setPower(1);
-				meta.addEffect(effect.build());
-				firework.setFireworkMeta(meta);
-				firework.detonate();
-			}
+                jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(player, achievement);
+                Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
+
+                Firework firework = player.getLocation().getWorld().spawn(player.getLocation().add(0, 3, 0),
+                    Firework.class);
+                FireworkMeta meta = firework.getFireworkMeta();
+                Builder effect = FireworkEffect.builder();
+                effect.with(types[rand.nextInt(types.length)]);
+                effect.withColor(Color.RED, Color.AQUA, Color.YELLOW, Color.GREEN, Color.LIME, Color.ORANGE,
+                    Color.PURPLE);
+                effect.withFade(Color.RED, Color.AQUA, Color.YELLOW, Color.GREEN, Color.LIME, Color.ORANGE,
+                    Color.PURPLE);
+                effect.flicker(true);
+                meta.setPower(1);
+                meta.addEffect(effect.build());
+                firework.setFireworkMeta(meta);
+                firework.detonate();
+            }
 		}.runTaskLater(Main.getJavaPlugin(), 1);
     }
 

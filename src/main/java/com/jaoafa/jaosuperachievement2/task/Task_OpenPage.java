@@ -37,7 +37,10 @@ public class Task_OpenPage extends BukkitRunnable {
 
     @Override
     public void run() {
-        player.sendMessage(AchievementAPI.getPrefix() + "情報を取得しています…しばらくお待ちください！");
+        player.sendMessage(Component.text().append(
+            AchievementAPI.getPrefix(),
+            Component.text("情報を取得しています…しばらくお待ちください！")
+        ));
 
         try {
             Inventory inv = Bukkit.getServer().createInventory(player, 4 * 9,

@@ -24,7 +24,7 @@ public class Discord {
             paramobj.put("content", content);
 
             String url = "https://discord.com/api/channels/" + channelId + "/messages";
-            RequestBody body = RequestBody.create(paramobj.toString(), JSON);
+            RequestBody body = RequestBody.create(JSON, paramobj.toString()); // NoSuchMethodError: okhttp3.RequestBody.create
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                 .url(url)

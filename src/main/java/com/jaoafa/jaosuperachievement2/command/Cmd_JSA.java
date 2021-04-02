@@ -3,6 +3,7 @@ package com.jaoafa.jaosuperachievement2.command;
 import com.jaoafa.jaosuperachievement2.Main;
 import com.jaoafa.jaosuperachievement2.api.AchievementAPI;
 import com.jaoafa.jaosuperachievement2.task.Task_OpenPage;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -23,9 +24,12 @@ public class Cmd_JSA implements CommandExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(AchievementAPI.getPrefix() + "このコマンドはプレイヤーからのみ実行できます。");
-			return true;
-		}
+            sender.sendMessage(Component.text().append(
+                AchievementAPI.getPrefix(),
+                Component.text("このコマンドはプレイヤーからのみ実行できます。")
+            ));
+            return true;
+        }
 		if (args.length == 1) {
 			Player player = (Player) sender;
 			OfflinePlayer offplayer = Bukkit.getOfflinePlayer(args[0]);
