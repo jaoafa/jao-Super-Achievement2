@@ -8,7 +8,7 @@ import com.jaoafa.jaosuperachievement2.lib.AchievementInterface;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,8 +23,9 @@ public class ContinuationLogins implements AchievementInterface, Listener {
     public Achievement getAchievement() {
         return Achievement.CONTINUATIONLOGINS;
     }
+
     @EventHandler
-    public void onLogin(PlayerLoginEvent event) {
+    public void onLogin(PlayerJoinEvent event) {
         // この時点でSQLにログイン記録が入っているはず。login_successチェックはしない。
         Player player = event.getPlayer();
         int days = getContinuationDays(player);

@@ -88,7 +88,7 @@ public class Achievementjao {
             Component.space(),
             Component.text("が「"),
             Component.text(achievement.getTitle()),
-            Component.text(String.format("」を取得しました！（%d人目）", gettedPlayerCount))
+            Component.text(String.format("」を取得しました！ (%d人目)", gettedPlayerCount))
         ));
         Main.getDiscord().sendMessage("597423199227084800",
             "**[jaoSuperAchievement2]** " + DiscordEscape(player.getName()) + "が「" + DiscordEscape(achievement.getTitle())
@@ -149,7 +149,7 @@ public class Achievementjao {
             Component.space(),
             Component.text("が「"),
             Component.text(achievement.getTitle()),
-            Component.text(String.format("」を取得しました！（%d人目）", gettedPlayerCount))
+            Component.text(String.format("」を取得しました！ (%d人目)", gettedPlayerCount))
         ));
         Main.getDiscord().sendMessage("597423199227084800",
             "**[jaoSuperAchievement2]** " + DiscordEscape(offplayer.getName()) + "が「"
