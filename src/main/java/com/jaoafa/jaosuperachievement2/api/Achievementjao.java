@@ -96,9 +96,6 @@ public class Achievementjao {
 
         new BukkitRunnable() {
             public void run() {
-                jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(player, achievement);
-                Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
-
                 Firework firework = player.getLocation().getWorld().spawn(player.getLocation().add(0, 3, 0),
                     Firework.class);
                 FireworkMeta meta = firework.getFireworkMeta();
@@ -154,13 +151,6 @@ public class Achievementjao {
         Main.getDiscord().sendMessage("597423199227084800",
             "**[jaoSuperAchievement2]** " + DiscordEscape(offplayer.getName()) + "が「"
                 + DiscordEscape(achievement.getTitle()) + "」を取得しました！ (" + gettedPlayerCount + "人目)");
-
-        new BukkitRunnable() {
-            public void run() {
-                jaoSuperAchievementEvent jaoSuperAchievementEvent = new jaoSuperAchievementEvent(offplayer, achievement);
-                Bukkit.getServer().getPluginManager().callEvent(jaoSuperAchievementEvent);
-            }
-        }.runTaskLater(Main.getJavaPlugin(), 1);
     }
 
     public static boolean isAlreadyGettedAchievement(OfflinePlayer player, Achievement achievement) {
