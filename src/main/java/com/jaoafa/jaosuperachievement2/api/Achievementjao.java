@@ -22,46 +22,70 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Achievementjao {
-    static private final FireworkEffect.Type[] types = {
+    private static final FireworkEffect.Type[] types = {
         Type.BALL,
         Type.BALL_LARGE,
         Type.BURST,
         Type.CREEPER,
         Type.STAR,
     };
-    static private final Random rand = new Random();
-    static Map<UUID, List<Integer>> GettedAchievementCache = new HashMap<>(); // uuid, AchievementID
+    private static final Random rand = new Random();
+    private static final Map<UUID, List<Integer>> GettedAchievementCache = new HashMap<>(); // uuid, AchievementID
 
     /**
-     * 実績を非同期に付与します。
+     * 実績を非同期に付与します。<br>
+     * このメソッドでは、チャット・Discordメッセージ・花火を出します。
      *
-     * @param player 実績を取得するプレイヤー
+     * @param player      実績を取得するプレイヤー
      * @param achievement 取得する実績
      */
     public static void getAchievementAsync(Player player, Achievement achievement) {
-        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
-            return;
-        }
-        new BukkitRunnable() {
-            public void run() {
-                Achievementjao.getAchievement(player, achievement);
-            }
-        }.runTaskAsynchronously(Main.getJavaPlugin());
+        getAchievementAsync(player, achievement, true);
     }
 
     /**
      * 実績を非同期に付与します。
      *
-     * @param player 実績を取得するプレイヤー
-     * @param achievement 取得する実績
+     * @param player          実績を取得するプレイヤー
+     * @param achievement     取得する実績
+     * @param isGrantAnnounce チャット・Discordメッセージを出すかどうか
      */
-    public static void getAchievementAsync(OfflinePlayer player, Achievement achievement) {
+    public static void getAchievementAsync(Player player, Achievement achievement, boolean isGrantAnnounce) {
         if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
             return;
         }
         new BukkitRunnable() {
             public void run() {
-                Achievementjao.getAchievement(player, achievement);
+                Achievementjao.getAchievement(player, achievement, isGrantAnnounce);
+            }
+        }.runTaskAsynchronously(Main.getJavaPlugin());
+    }
+
+    /**
+     * 実績を非同期に付与します。<br>
+     * このメソッドでは、チャット・Discordメッセージ・花火を出します。
+     *
+     * @param player      実績を取得するプレイヤー
+     * @param achievement 取得する実績
+     */
+    public static void getAchievementAsync(OfflinePlayer player, Achievement achievement) {
+        getAchievementAsync(player, achievement, true);
+    }
+
+    /**
+     * 実績を非同期に付与します。
+     *
+     * @param player          実績を取得するプレイヤー
+     * @param achievement     取得する実績
+     * @param isGrantAnnounce チャット・Discordメッセージを出すかどうか
+     */
+    public static void getAchievementAsync(OfflinePlayer player, Achievement achievement, boolean isGrantAnnounce) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
+            return;
+        }
+        new BukkitRunnable() {
+            public void run() {
+                Achievementjao.getAchievement(player, achievement, isGrantAnnounce);
             }
         }.runTaskAsynchronously(Main.getJavaPlugin());
     }
@@ -70,7 +94,7 @@ public class Achievementjao {
      * 実績を付与します。<br>
      * このメソッドでは、チャット・Discordメッセージ・花火を出します。
      *
-     * @param player 実績を取得するプレイヤー
+     * @param player      実績を取得するプレイヤー
      * @param achievement 取得する実績
      * @see #getAchievementAsync(Player, Achievement)
      * @deprecated 同期的に動作してしまうため、 getAchievementAsync(Player, Achievement) を使用して下さい。
@@ -115,11 +139,11 @@ public class Achievementjao {
             return;
         }
 
-        if(!isGrantAnnounce){
+        if (!isGrantAnnounce) {
             return;
         }
 
-        int gettedPlayerCount = getGotPlayerCount(achievement.getId());
+        int gettedPlayerCount = getGotPlayerCount(achievement);
 
         Bukkit.getServer().sendMessage(Component.text().append(
             AchievementAPI.getPrefix(),
@@ -200,11 +224,11 @@ public class Achievementjao {
             return;
         }
 
-        if(!isGrantAnnounce){
+        if (!isGrantAnnounce) {
             return;
         }
 
-        int gettedPlayerCount = getGotPlayerCount(achievement.getId());
+        int gettedPlayerCount = getGotPlayerCount(achievement);
 
         Bukkit.getServer().sendMessage(Component.text().append(
             AchievementAPI.getPrefix(),
@@ -251,28 +275,26 @@ public class Achievementjao {
             MySQLDBManager sqlmanager = Main.getMySQLDBManager();
             Connection conn = sqlmanager.getConnection();
 
-            PreparedStatement statement = conn.prepareStatement(
-                "SELECT * FROM jaoSuperAchievement2 WHERE uuid = ? AND achievementid = ?");
-            statement.setString(1, player.getUniqueId().toString());
-            statement.setInt(2, achievement.getId());
-            ResultSet res = statement.executeQuery();
-            if (res.next()) {
-                if (GettedAchievementCache.containsKey(player.getUniqueId())) {
-                    List<Integer> gettedList = GettedAchievementCache.get(player.getUniqueId());
-                    gettedList.add(achievement.getId());
-                    GettedAchievementCache.put(player.getUniqueId(), gettedList);
-                } else {
-                    List<Integer> gettedList = new ArrayList<>();
-                    gettedList.add(achievement.getId());
-                    GettedAchievementCache.put(player.getUniqueId(), gettedList);
+            try (PreparedStatement statement = conn.prepareStatement(
+                "SELECT * FROM jaoSuperAchievement2 WHERE uuid = ? AND achievementid = ?")) {
+                statement.setString(1, player.getUniqueId().toString());
+                statement.setInt(2, achievement.getId());
+                try (ResultSet res = statement.executeQuery()) {
+                    if (res.next()) {
+                        if (GettedAchievementCache.containsKey(player.getUniqueId())) {
+                            List<Integer> gettedList = GettedAchievementCache.get(player.getUniqueId());
+                            gettedList.add(achievement.getId());
+                            GettedAchievementCache.put(player.getUniqueId(), gettedList);
+                        } else {
+                            List<Integer> gettedList = new ArrayList<>();
+                            gettedList.add(achievement.getId());
+                            GettedAchievementCache.put(player.getUniqueId(), gettedList);
+                        }
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
-                res.close();
-                statement.close();
-                return true;
-            } else {
-                res.close();
-                statement.close();
-                return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -307,19 +329,12 @@ public class Achievementjao {
             MySQLDBManager sqlmanager = Main.getMySQLDBManager();
             Connection conn = sqlmanager.getConnection();
 
-            PreparedStatement statement = conn
-                .prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2 WHERE achievementid = ?;");
-            statement.setInt(1, achievement.getId());
-            ResultSet res = statement.executeQuery();
-            if (res.next()) {
-                int ret = res.getInt(1);
-                res.close();
-                statement.close();
-                return ret;
-            } else {
-                res.close();
-                statement.close();
-                return 0;
+            try (PreparedStatement statement = conn
+                .prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2 WHERE achievementid = ?;")) {
+                statement.setInt(1, achievement.getId());
+                try (ResultSet res = statement.executeQuery()) {
+                    return res.next() ? res.getInt(1) : 0;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

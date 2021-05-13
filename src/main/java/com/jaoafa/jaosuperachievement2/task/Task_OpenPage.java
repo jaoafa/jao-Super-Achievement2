@@ -306,20 +306,20 @@ public class Task_OpenPage extends BukkitRunnable {
             MySQLDBManager sqlmanager = Main.getMySQLDBManager();
             Connection conn = sqlmanager.getConnection();
 
-            PreparedStatement statement = conn
-                .prepareStatement("SELECT * FROM jaoSuperAchievement2;");
-            ResultSet res = statement.executeQuery();
-            while (res.next()) {
-                int achievementID = res.getInt("achievementid");
-                if (gettedPlayerCountCache.containsKey(achievementID)) {
-                    gettedPlayerCountCache.put(achievementID,
-                        gettedPlayerCountCache.get(achievementID) + 1);
-                } else {
-                    gettedPlayerCountCache.put(achievementID, 1);
+            try (PreparedStatement statement = conn
+                .prepareStatement("SELECT * FROM jaoSuperAchievement2;")) {
+                try (ResultSet res = statement.executeQuery()) {
+                    while (res.next()) {
+                        int achievementID = res.getInt("achievementid");
+                        if (gettedPlayerCountCache.containsKey(achievementID)) {
+                            gettedPlayerCountCache.put(achievementID,
+                                gettedPlayerCountCache.get(achievementID) + 1);
+                        } else {
+                            gettedPlayerCountCache.put(achievementID, 1);
+                        }
+                    }
                 }
             }
-            res.close();
-            statement.close();
             gettedPlayerCountCache_unixtime = System.currentTimeMillis() / 1000;
             if (!gettedPlayerCountCache.containsKey(id)) {
                 return 0;
