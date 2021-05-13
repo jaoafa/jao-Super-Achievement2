@@ -32,17 +32,12 @@ public class Achievementjao {
     static private final Random rand = new Random();
     static Map<UUID, List<Integer>> GettedAchievementCache = new HashMap<>(); // uuid, AchievementID
 
-    public static void getAchievementAsync(OfflinePlayer player, Achievement achievement) {
-        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
-            return;
-        }
-        new BukkitRunnable() {
-            public void run() {
-                Achievementjao.getAchievement(player, achievement);
-            }
-        }.runTaskAsynchronously(Main.getJavaPlugin());
-    }
-
+    /**
+     * 実績を非同期に付与します。
+     *
+     * @param player 実績を取得するプレイヤー
+     * @param achievement 取得する実績
+     */
     public static void getAchievementAsync(Player player, Achievement achievement) {
         if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
             return;
@@ -54,12 +49,52 @@ public class Achievementjao {
         }.runTaskAsynchronously(Main.getJavaPlugin());
     }
 
-    @Deprecated
-    public static void getAchievement(Player player, Achievement achievement) {
+    /**
+     * 実績を非同期に付与します。
+     *
+     * @param player 実績を取得するプレイヤー
+     * @param achievement 取得する実績
+     */
+    public static void getAchievementAsync(OfflinePlayer player, Achievement achievement) {
         if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
             return;
         }
-        if (isAlreadyGettedAchievement(player, achievement)) {
+        new BukkitRunnable() {
+            public void run() {
+                Achievementjao.getAchievement(player, achievement);
+            }
+        }.runTaskAsynchronously(Main.getJavaPlugin());
+    }
+
+    /**
+     * 実績を付与します。<br>
+     * このメソッドでは、チャット・Discordメッセージ・花火を出します。
+     *
+     * @param player 実績を取得するプレイヤー
+     * @param achievement 取得する実績
+     * @see #getAchievementAsync(Player, Achievement)
+     * @deprecated 同期的に動作してしまうため、 getAchievementAsync(Player, Achievement) を使用して下さい。
+     */
+    @Deprecated
+    public static void getAchievement(Player player, Achievement achievement) {
+        getAchievement(player, achievement, true);
+    }
+
+    /**
+     * 実績を付与します。
+     *
+     * @param player 実績を取得するプレイヤー
+     * @param achievement 取得する実績
+     * @param isGrantAnnounce チャット・Discordメッセージを出すかどうか
+     * @see #getAchievementAsync(Player, Achievement)
+     * @deprecated 同期的に動作してしまうため、 getAchievementAsync(Player, Achievement) を使用して下さい。
+     */
+    @Deprecated
+    public static void getAchievement(Player player, Achievement achievement, boolean isGrantAnnounce) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
+            return;
+        }
+        if (isAlreadyGotAchievement(player, achievement)) {
             return;
         }
 
@@ -80,7 +115,11 @@ public class Achievementjao {
             return;
         }
 
-        int gettedPlayerCount = getGettedPlayerCount(achievement.getId());
+        if(!isGrantAnnounce){
+            return;
+        }
+
+        int gettedPlayerCount = getGotPlayerCount(achievement.getId());
 
         Bukkit.getServer().sendMessage(Component.text().append(
             AchievementAPI.getPrefix(),
@@ -114,11 +153,34 @@ public class Achievementjao {
         }.runTaskLater(Main.getJavaPlugin(), 1);
     }
 
-    public static void getAchievement(OfflinePlayer offplayer, Achievement achievement) {
+    /**
+     * 実績を付与します。<br>
+     * このメソッドでは、チャット・Discordメッセージを出します。
+     *
+     * @param offplayer 実績を取得するプレイヤー
+     * @param achievement 取得する実績
+     * @see #getAchievementAsync(OfflinePlayer, Achievement)
+     * @deprecated 同期的に動作してしまうため、 getAchievementAsync(OfflinePlayer, Achievement) を使用して下さい。
+     */
+    @Deprecated
+    public static void getAchievement(OfflinePlayer offplayer, Achievement achievement){
+        getAchievement(offplayer, achievement, true);
+    }
+
+    /**
+     * 実績を付与します。同期的に動作してしまうため、 getAchievementAsync(OfflinePlayer, Achievement) を使用して下さい。
+     *
+     * @param offplayer 実績を取得するプレイヤー
+     * @param achievement 取得する実績
+     * @param isGrantAnnounce チャット・Discordメッセージを出すかどうか
+     * @see #getAchievementAsync(OfflinePlayer, Achievement)
+     */
+    @Deprecated
+    public static void getAchievement(OfflinePlayer offplayer, Achievement achievement, boolean isGrantAnnounce) {
         if (!Bukkit.getPluginManager().isPluginEnabled("jao-Super-Achievement2")) {
             return;
         }
-        if (isAlreadyGettedAchievement(offplayer, achievement)) {
+        if (isAlreadyGotAchievement(offplayer, achievement)) {
             return;
         }
 
@@ -138,7 +200,11 @@ public class Achievementjao {
             return;
         }
 
-        int gettedPlayerCount = getGettedPlayerCount(achievement.getId());
+        if(!isGrantAnnounce){
+            return;
+        }
+
+        int gettedPlayerCount = getGotPlayerCount(achievement.getId());
 
         Bukkit.getServer().sendMessage(Component.text().append(
             AchievementAPI.getPrefix(),
@@ -153,10 +219,31 @@ public class Achievementjao {
                 + DiscordEscape(achievement.getTitle()) + "」を取得しました！ (" + gettedPlayerCount + "人目)");
     }
 
+    /**
+     * 既に実績を取得しているかどうかを返します。
+     *
+     * @param player 取得しているかどうかを確認するプレイヤー
+     * @param achievement 実績
+     * @return 実績を取得しているか
+     * @see #isAlreadyGotAchievement(OfflinePlayer, Achievement)
+     * @deprecated メソッド名の変更
+     */
+    @Deprecated
     public static boolean isAlreadyGettedAchievement(OfflinePlayer player, Achievement achievement) {
+        return isAlreadyGotAchievement(player, achievement);
+    }
+
+    /**
+     * 既に実績を取得しているかどうかを返します。
+     *
+     * @param player 取得しているかどうかを確認するプレイヤー
+     * @param achievement 実績
+     * @return 実績を取得しているか
+     */
+    public static boolean isAlreadyGotAchievement(OfflinePlayer player, Achievement achievement) {
         if (GettedAchievementCache.containsKey(player.getUniqueId())) {
-            List<Integer> gettedList = GettedAchievementCache.get(player.getUniqueId());
-            if (gettedList.contains(achievement.getId())) {
+            List<Integer> gotList = GettedAchievementCache.get(player.getUniqueId());
+            if (gotList.contains(achievement.getId())) {
                 return true;
             }
         }
@@ -193,14 +280,36 @@ public class Achievementjao {
         }
     }
 
+    /**
+     * 実績取得済みのプレイヤー数を返します。
+     *
+     * @param id 実績のId
+     * @return その実績を取得済みのプレイヤー数
+     * @deprecated メソッド名および引数の変更
+     * @see #getGotPlayerCount(Achievement)
+     */
+    @Deprecated
     static int getGettedPlayerCount(int id) {
+        return getGotPlayerCount(Achievement.fromId(id));
+    }
+
+    /**
+     * 実績取得済みのプレイヤー数を返します。
+     *
+     * @param achievement 実績
+     * @return その実績を取得済みのプレイヤー数
+     */
+    static int getGotPlayerCount(Achievement achievement) {
+        if(achievement == null){
+            return 0;
+        }
         try {
             MySQLDBManager sqlmanager = Main.getMySQLDBManager();
             Connection conn = sqlmanager.getConnection();
 
             PreparedStatement statement = conn
                 .prepareStatement("SELECT COUNT(*) FROM jaoSuperAchievement2 WHERE achievementid = ?;");
-            statement.setInt(1, id);
+            statement.setInt(1, achievement.getId());
             ResultSet res = statement.executeQuery();
             if (res.next()) {
                 int ret = res.getInt(1);
