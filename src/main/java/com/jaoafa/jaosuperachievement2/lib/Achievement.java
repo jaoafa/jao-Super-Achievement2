@@ -1,5 +1,7 @@
 package com.jaoafa.jaosuperachievement2.lib;
 
+import java.util.Arrays;
+
 public enum Achievement {
     /**
      * No.1 はじめてのjao
@@ -208,5 +210,18 @@ public enum Achievement {
 
     public boolean isHidden() {
         return hidden;
+    }
+
+    /**
+     * Idに合致する実績を返します
+     *
+     * @param id 実績Id
+     * @return 実績Idに合致する実績 (なければ NULL)
+     */
+    public static Achievement fromId(int id){
+        return Arrays.stream(values())
+            .filter(achievement -> achievement.id == id)
+            .findFirst()
+            .orElse(null);
     }
 }

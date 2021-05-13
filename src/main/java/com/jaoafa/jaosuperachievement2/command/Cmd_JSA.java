@@ -23,21 +23,20 @@ public class Cmd_JSA implements CommandExecutor {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-		if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("このコマンドはプレイヤーからのみ実行できます。")
             ));
             return true;
         }
-		if (args.length == 1) {
-			Player player = (Player) sender;
-			OfflinePlayer offplayer = Bukkit.getOfflinePlayer(args[0]);
+        Player player = (Player) sender;
+        if (args.length == 1) {
+            OfflinePlayer offplayer = Bukkit.getOfflinePlayer(args[0]);
             new Task_OpenPage(player, offplayer, 1).runTaskAsynchronously(Main.getJavaPlugin());
-		} else {
-			Player player = (Player) sender;
-			new Task_OpenPage(player, player, 1).runTaskAsynchronously(Main.getJavaPlugin());
-		}
-		return true;
-	}
+        } else {
+            new Task_OpenPage(player, player, 1).runTaskAsynchronously(Main.getJavaPlugin());
+        }
+        return true;
+    }
 }
