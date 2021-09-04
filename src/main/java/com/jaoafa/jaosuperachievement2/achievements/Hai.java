@@ -30,6 +30,9 @@ public class Hai implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         LoginTime.put(player.getUniqueId(), System.currentTimeMillis() / 1000);
     }
@@ -37,6 +40,9 @@ public class Hai implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         LoginTime.remove(player.getUniqueId());
     }
@@ -44,6 +50,9 @@ public class Hai implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
 

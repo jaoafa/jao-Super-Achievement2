@@ -31,6 +31,9 @@ public class WhereaboutsUnknown implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         if (!Actioned.contains(player.getUniqueId())) {
             Actioned.add(player.getUniqueId());
@@ -40,6 +43,9 @@ public class WhereaboutsUnknown implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         if (!Actioned.contains(player.getUniqueId())) {
             Actioned.add(player.getUniqueId());
@@ -49,6 +55,9 @@ public class WhereaboutsUnknown implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         Actioned.remove(player.getUniqueId());
         if (WhereaboutsUnknownTask.containsKey(player.getUniqueId())

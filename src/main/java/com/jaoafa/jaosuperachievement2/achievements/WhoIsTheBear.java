@@ -25,6 +25,9 @@ public class WhoIsTheBear implements AchievementInterface, Listener {
             return;
         }
         Player player = (Player) event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         ItemStack helmet = player.getInventory().getHelmet();
         if (helmet == null)

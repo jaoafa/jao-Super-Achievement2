@@ -23,6 +23,9 @@ public class NaughtyBoy implements AchievementInterface, Listener {
             return;
         }
         Player player = (Player) event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         ItemStack main = player.getInventory().getItemInMainHand();
         ItemStack off = player.getInventory().getItemInOffHand();

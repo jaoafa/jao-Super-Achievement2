@@ -20,6 +20,9 @@ public class Builder implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         int count = 0;
         for (Material material : Material.values()) {

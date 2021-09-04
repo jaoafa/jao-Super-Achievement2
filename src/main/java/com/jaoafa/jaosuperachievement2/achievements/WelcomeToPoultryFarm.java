@@ -23,6 +23,9 @@ public class WelcomeToPoultryFarm implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnFirstX9Z(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         new BukkitRunnable() {
             public void run() {

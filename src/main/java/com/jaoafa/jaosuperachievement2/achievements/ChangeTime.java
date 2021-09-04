@@ -17,6 +17,9 @@ public class ChangeTime implements AchievementInterface, Listener {
     @EventHandler(ignoreCancelled = true)
     public void onCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
         String command = event.getMessage();
         if (!player.hasPermission("minecraft.command.time")) {
             return;

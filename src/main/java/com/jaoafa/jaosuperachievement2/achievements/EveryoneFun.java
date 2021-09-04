@@ -18,6 +18,9 @@ public class EveryoneFun implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         if (Bukkit.getServer().getOnlinePlayers().size() < 10) {
             return;

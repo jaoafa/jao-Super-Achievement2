@@ -17,6 +17,9 @@ public class EncounterJaotan implements AchievementInterface, Listener {
     @EventHandler
     public void onPlayerCommand(PlayerCommandPreprocessEvent event){
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
         String command = event.getMessage();
 
         if(!command.startsWith("/tp jaotan")){

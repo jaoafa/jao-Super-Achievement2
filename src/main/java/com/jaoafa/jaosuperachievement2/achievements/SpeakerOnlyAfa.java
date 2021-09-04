@@ -27,6 +27,9 @@ public class SpeakerOnlyAfa implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
         Component component = event.message();
         String message = PlainComponentSerializer.plain().serialize(component);
 
@@ -50,6 +53,9 @@ public class SpeakerOnlyAfa implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
         AlreadyJao.remove(player.getUniqueId());
     }
 }

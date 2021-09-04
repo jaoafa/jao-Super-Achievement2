@@ -30,6 +30,9 @@ public class VeryFreeTimePerson implements AchievementInterface, Listener {
             return;
         }
         Player player = (Player) event.getWhoClicked();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
         ItemStack is = event.getRecipe().getResult();
 
         if (is.getType() == Material.COAL) {

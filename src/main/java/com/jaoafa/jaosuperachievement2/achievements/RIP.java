@@ -18,6 +18,9 @@ public class RIP implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
         Achievementjao.getAchievementAsync(player, getAchievement());
     }
 }

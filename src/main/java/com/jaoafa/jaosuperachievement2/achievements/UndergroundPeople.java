@@ -17,6 +17,9 @@ public class UndergroundPeople implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         if (player.getLocation().getY() > -64D) {
             return;

@@ -22,6 +22,9 @@ public class MushroomPlantation implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnFirstHirotaisou2012(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         new BukkitRunnable() {
             public void run() {

@@ -24,6 +24,9 @@ public class NuclearTest implements AchievementInterface, Listener {
             return;
         }
         Player player = (Player) event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         if(Arrays.stream(player.getInventory().getContents()).filter(Objects::nonNull).noneMatch(item -> item.getType() == Material.TNT)){
             return;

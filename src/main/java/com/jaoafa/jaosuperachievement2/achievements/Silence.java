@@ -31,6 +31,9 @@ public class Silence implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         Speaked.remove(player.getUniqueId());
         if (SilenceTask.containsKey(player.getUniqueId()) && !SilenceTask.get(player.getUniqueId()).isCancelled()) {
@@ -45,7 +48,9 @@ public class Silence implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        Component component = event.message();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
 
         if (!Speaked.contains(player.getUniqueId())) {
             Speaked.add(player.getUniqueId());

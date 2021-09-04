@@ -17,6 +17,9 @@ public class ExpectedWriter implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnEditBook(PlayerEditBookEvent event) {
         Player player = event.getPlayer();
+        if(player.hasMetadata("NPC")){
+            return;
+        }
         if(!event.isSigning()){
             return;
         }
