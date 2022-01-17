@@ -1,9 +1,9 @@
 name: jao-Super-Achievement2
 main: com.jaoafa.jaosuperachievement2.Main
-version: 2021.04.29_22.42
+version: ${project.version}
 description: jao-Super-Achievement2
 database: true
-api-version: 1.16
+api-version: 1.18.1
 author: mine_book000
 commands:
   jsa:
