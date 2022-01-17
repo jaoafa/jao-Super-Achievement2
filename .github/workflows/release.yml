@@ -66,17 +66,13 @@ jobs:
           body: ${{ steps.tag_version.outputs.changelog }}
 
       - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: shogo82148/actions-upload-release-asset@v1.5.0
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/jaosuperachievement2.jar
-          asset_name: ${{ steps.vars.outputs.PROJECT_NAME }}-${{ steps.tag_version.outputs.new_tag }}.jar
-          asset_content_type: application/java-archive
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: target/*.jar
 
       - name: Released comment
-        uses: actions/github-script@v4
+        uses: actions/github-script@v5
         if: github.event_name == 'pull_request_target'
         with:
           script: |
