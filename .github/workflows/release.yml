@@ -152,4 +152,4 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
             https://api.github.com/repos/tomacheese/repo.tomacheese.com/actions/workflows/jsa2-deploy.yml/dispatches \
-            -d "{ \"ref\": \"${{ steps.manage-matrix.outputs.ref }}\", \"inputs\": { \"version\": \"${{ needs.release.outputs.version }}\" } }"
+            -d "{ \"ref\": \"master\", \"inputs\": { \"version\": \"${{ needs.release.outputs.version }}\" } }"
