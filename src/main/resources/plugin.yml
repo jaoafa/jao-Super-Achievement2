@@ -3,7 +3,7 @@ main: com.jaoafa.jaosuperachievement2.Main
 version: ${project.version}
 description: jao-Super-Achievement2
 database: true
-api-version: 1.18.1
+api-version: 1.18
 author: mine_book000
 commands:
   jsa:
