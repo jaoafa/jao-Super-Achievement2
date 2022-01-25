@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Task_Hai extends BukkitRunnable {
-    Player player;
+    final Player player;
 
     public Task_Hai(Player player) {
         this.player = player;

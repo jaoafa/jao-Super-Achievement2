@@ -17,7 +17,7 @@ public class MyHead implements AchievementInterface, Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
         String message = event.getMessage();

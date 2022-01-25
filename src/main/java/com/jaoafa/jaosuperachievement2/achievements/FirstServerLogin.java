@@ -24,7 +24,7 @@ public class FirstServerLogin implements AchievementInterface, Listener {
         }
 
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
         first = true;

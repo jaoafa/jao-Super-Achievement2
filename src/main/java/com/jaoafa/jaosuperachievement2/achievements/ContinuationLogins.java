@@ -28,11 +28,11 @@ public class ContinuationLogins implements AchievementInterface, Listener {
     public void onLogin(PlayerJoinEvent event) {
         // この時点でSQLにログイン記録が入っているはず。login_successチェックはしない。
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
         int days = getContinuationDays(player);
-        System.out.println("[ContinuationLogins] ContinuationLoginDays: " + days);
+        Main.getMainLogger().info("[ContinuationLogins] ContinuationLoginDays: " + days);
         if (days >= 7) {
             // 7日間以上ログイン
             Achievementjao.getAchievementAsync(player, getAchievement());

@@ -25,9 +25,11 @@ import java.util.Date;
 import java.util.*;
 
 public class Task_OpenPage extends BukkitRunnable {
-    Player player;
-    OfflinePlayer offplayer;
-    int page;
+    final Player player;
+    final OfflinePlayer offplayer;
+    final int page;
+    final Map<Integer, Integer> gettedPlayerCountCache = new LinkedHashMap<>();
+    long gettedPlayerCountCache_unixtime = -1;
 
     public Task_OpenPage(Player player, OfflinePlayer offplayer, int page) {
         this.player = player;
@@ -83,14 +85,14 @@ public class Task_OpenPage extends BukkitRunnable {
                 String date_str = Main.sdfFormat(date);
                 int gettedplayercount = getGettedPlayerCount(id);
 
-                boolean getted = isGetted(offplayer, id);
+                boolean getted = isGot(offplayer, id);
                 Material material;
                 String msg;
                 String hiddenmsg = "";
                 String unlockdate;
                 int damage = id % 16;
                 if (getted) {
-                    String gettedTime = getGettedTime(offplayer, id);
+                    String gettedTime = getGotTime(offplayer, id);
                     material = getWOOL(damage); // 取得済みなら羊毛
                     msg = ChatColor.GREEN + "実績取得済み";
                     unlockdate = "(解除日時: " + gettedTime + " | 解除者数: " + gettedplayercount + "人)";
@@ -156,7 +158,7 @@ public class Task_OpenPage extends BukkitRunnable {
         }
     }
 
-    Material getWOOL(int damage){
+    Material getWOOL(int damage) {
         List<Material> materials = Arrays.asList(
             Material.WHITE_WOOL,
             Material.ORANGE_WOOL,
@@ -177,7 +179,7 @@ public class Task_OpenPage extends BukkitRunnable {
         return materials.get(damage);
     }
 
-    Material getSTAINED_GLASS(int damage){
+    Material getSTAINED_GLASS(int damage) {
         List<Material> materials = Arrays.asList(
             Material.WHITE_STAINED_GLASS,
             Material.ORANGE_STAINED_GLASS,
@@ -222,7 +224,8 @@ public class Task_OpenPage extends BukkitRunnable {
     void setItemSkull(Inventory inv, int index, String name, Component title) {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skull_meta = (SkullMeta) item.getItemMeta();
-        skull_meta.setOwner(name);
+        //noinspection deprecation
+        skull_meta.setOwningPlayer(Bukkit.getOfflinePlayer(name));
         skull_meta.displayName(title);
         item.setItemMeta(skull_meta);
         inv.setItem(index, item);
@@ -239,7 +242,7 @@ public class Task_OpenPage extends BukkitRunnable {
         inv.setItem(index, item);
     }
 
-    boolean isGetted(OfflinePlayer offplayer, int id) {
+    boolean isGot(OfflinePlayer offplayer, int id) {
         try {
             MySQLDBManager sqlmanager = Main.getMySQLDBManager();
             Connection conn = sqlmanager.getConnection();
@@ -264,7 +267,7 @@ public class Task_OpenPage extends BukkitRunnable {
         }
     }
 
-    String getGettedTime(OfflinePlayer offplayer, int id) {
+    String getGotTime(OfflinePlayer offplayer, int id) {
         try {
             MySQLDBManager sqlmanager = Main.getMySQLDBManager();
             Connection conn = sqlmanager.getConnection();
@@ -289,9 +292,6 @@ public class Task_OpenPage extends BukkitRunnable {
             return null;
         }
     }
-
-    Map<Integer, Integer> gettedPlayerCountCache = new LinkedHashMap<>();
-    long gettedPlayerCountCache_unixtime = -1;
 
     int getGettedPlayerCount(int id) {
         if (gettedPlayerCountCache_unixtime != -1

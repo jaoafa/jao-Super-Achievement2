@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Task_jaoists extends BukkitRunnable {
-    Map<Achievement, Integer> achievements = new HashMap<>();
+    final Map<Achievement, Integer> achievements = new HashMap<>();
 
     {
         achievements.put(Achievement.NORMALJAOIST, 3600); // 1時間 = 3600秒
@@ -23,8 +23,8 @@ public class Task_jaoists extends BukkitRunnable {
 
     @Override
     public void run() {
-        for(Player player: Bukkit.getOnlinePlayers()){
-            for(Map.Entry<Achievement, Integer> entry: achievements.entrySet()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            for (Map.Entry<Achievement, Integer> entry : achievements.entrySet()) {
                 Achievement achievement = entry.getKey();
                 int onlineGameSec = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20;
                 int borderGameSec = entry.getValue();

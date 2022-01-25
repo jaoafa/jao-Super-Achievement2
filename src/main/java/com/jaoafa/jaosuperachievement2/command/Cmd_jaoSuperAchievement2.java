@@ -7,6 +7,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,23 +38,23 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
             ));
             return true;
         }
-		String latestVer = getVersion(desc.getName());
-		if(latestVer == null){
+        String latestVer = getVersion(desc.getName());
+        if (latestVer == null) {
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("現バージョンの取得に失敗しました。", NamedTextColor.AQUA)
             ));
-		    return true;
+            return true;
         }
-		Date latestVerDate = getVersionDate(latestVer);
-		String latestVerSha = getLastCommitSha(desc.getName());
+        Date latestVerDate = getVersionDate(latestVer);
+        String latestVerSha = getLastCommitSha(desc.getName());
 
         sender.sendMessage(Component.text().append(
             AchievementAPI.getPrefix(),
             Component.text("----- " + desc.getName() + " infomation -----", NamedTextColor.AQUA)
         ));
 
-		if (nowVer.equals(latestVer)) {
+        if (nowVer.equals(latestVer)) {
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("現在導入されているバージョンは最新です。", NamedTextColor.AQUA)
@@ -62,8 +63,8 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
                 AchievementAPI.getPrefix(),
                 Component.text("導入バージョン: " + nowVer, NamedTextColor.AQUA)
             ));
-		} else if (nowVerSha.equals(latestVerSha)) {
-			// shaがおなじ
+        } else if (nowVerSha.equals(latestVerSha)) {
+            // shaがおなじ
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("現在導入されているバージョンは最新です。", NamedTextColor.AQUA)
@@ -76,8 +77,8 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
                 AchievementAPI.getPrefix(),
                 Component.text("最新バージョン: " + latestVer + " (" + latestVerSha + ")", NamedTextColor.AQUA)
             ));
-		} else if (nowVerDate.before(latestVerDate)) {
-			// 新しいバージョンあり
+        } else if (nowVerDate.before(latestVerDate)) {
+            // 新しいバージョンあり
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("現在導入されているバージョンよりも新しいバージョンがリリースされています。", NamedTextColor.AQUA)
@@ -90,8 +91,8 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
                 AchievementAPI.getPrefix(),
                 Component.text("最新バージョン: " + latestVer + " (" + latestVerSha + ")", NamedTextColor.AQUA)
             ));
-		} else if (nowVerDate.after(latestVerDate)) {
-			// リリースバージョンよりも導入されている方が新しい
+        } else if (nowVerDate.after(latestVerDate)) {
+            // リリースバージョンよりも導入されている方が新しい
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("現在導入されているバージョンは最新です。(※)", NamedTextColor.AQUA)
@@ -104,32 +105,32 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
                 AchievementAPI.getPrefix(),
                 Component.text("最新バージョン: " + latestVer + " (" + latestVerSha + ")", NamedTextColor.AQUA)
             ));
-		}
+        }
 
         sender.sendMessage(Component.text().append(
             AchievementAPI.getPrefix(),
             Component.text("最近の更新履歴", NamedTextColor.AQUA)
         ));
-		List<String> commits = getCommits(desc.getName());
-		if (commits == null) {
+        List<String> commits = getCommits(desc.getName());
+        if (commits == null) {
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("- コミット履歴の取得に失敗しました。", NamedTextColor.AQUA)
             ));
-			return true;
-		}
-		for (String commit : commits) {
+            return true;
+        }
+        for (String commit : commits) {
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("- " + commit, NamedTextColor.AQUA)
             ));
-		}
-		return true;
-	}
+        }
+        return true;
+    }
 
-	private List<String> getCommits(String repo) {
-		LinkedList<String> ret = new LinkedList<>();
-		try {
+    private List<String> getCommits(String repo) {
+        LinkedList<String> ret = new LinkedList<>();
+        try {
             String url = "https://api.github.com/repos/jaoafa/" + repo + "/commits";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder().url(url).get().build();
@@ -148,56 +149,60 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
                 ret.add("[" + sdfFormat(date) + "|" + sha + "] " + obj.getString("message"));
             }
 
-			return ret;
-		} catch (IOException | JSONException | ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+            return ret;
+        } catch (IOException | JSONException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-	private String getLastCommitSha(String repo) {
-		try {
-			String url = "https://api.github.com/repos/jaoafa/" + repo + "/commits";
-			OkHttpClient client = new OkHttpClient();
-			Request request = new Request.Builder().url(url).get().build();
-			Response response = client.newCall(request).execute();
-			if (response.code() != 200) {
-				return null;
-			}
-			JSONArray array = new JSONArray(response.body().string());
-			response.close();
+    private String getLastCommitSha(String repo) {
+        try {
+            String url = "https://api.github.com/repos/jaoafa/" + repo + "/commits";
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(url).get().build();
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200) {
+                return null;
+            }
+            ResponseBody body = response.body();
+            if (body == null) {
+                return null;
+            }
+            JSONArray array = new JSONArray(body.string());
+            response.close();
 
-			return array.getJSONObject(0).getString("sha").substring(0, 7);
-		} catch (IOException | JSONException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+            return array.getJSONObject(0).getString("sha").substring(0, 7);
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-	private Date getVersionDate(String version) {
-		String[] day_time = version.split("_");
-		String[] days = day_time[0].split("\\.");
-		String[] times = day_time[1].split("\\.");
-		Calendar build_cal = Calendar.getInstance();
-		build_cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
-		build_cal.set(Integer.parseInt(days[0]),
-				Integer.parseInt(days[1]),
-				Integer.parseInt(days[2]),
-				Integer.parseInt(times[0]),
-				Integer.parseInt(times[1]));
-		return build_cal.getTime();
-	}
+    private Date getVersionDate(String version) {
+        String[] day_time = version.split("_");
+        String[] days = day_time[0].split("\\.");
+        String[] times = day_time[1].split("\\.");
+        Calendar build_cal = Calendar.getInstance();
+        build_cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
+        build_cal.set(Integer.parseInt(days[0]),
+            Integer.parseInt(days[1]),
+            Integer.parseInt(days[2]),
+            Integer.parseInt(times[0]),
+            Integer.parseInt(times[1]));
+        return build_cal.getTime();
+    }
 
-	private String getVersionSha(String version) {
-		String[] day_time = version.split("_");
-		if (day_time.length == 3) {
-			return day_time[2];
-		}
-		return null;
-	}
+    private String getVersionSha(String version) {
+        String[] day_time = version.split("_");
+        if (day_time.length == 3) {
+            return day_time[2];
+        }
+        return null;
+    }
 
-	private String getVersion(String repo) {
-		try {
+    private String getVersion(String repo) {
+        try {
             String url = "https://raw.githubusercontent.com/jaoafa/" + repo + "/master/src/main/resources/plugin.yml";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder().url(url).get().build();
@@ -213,13 +218,13 @@ public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
                 return null;
             }
         } catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-	String sdfFormat(Date date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		return sdf.format(date);
-	}
+    String sdfFormat(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        return sdf.format(date);
+    }
 }

@@ -4,25 +4,27 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class AchievementAPI {
-	/**
-	 * 「[jaoSuperAchievement] 」というプレフィックスを返します。
-	 * @return プレフィックス
-	 */
-	public static Component getPrefix() {
-	    return Component.text().append(
+    /**
+     * 「[jaoSuperAchievement] 」というプレフィックスを返します。
+     *
+     * @return プレフィックス
+     */
+    public static Component getPrefix() {
+        return Component.text().append(
             Component.text("["),
             getjaoSuperAchievement(),
             Component.text("]"),
             Component.space()
         ).build();
-	}
+    }
 
-	/**
-	 * 「jaoSuperAchievement」というプレフィックスを返します。
-	 * @return プレフィックス
-	 */
-	public static Component getjaoSuperAchievement() {
-	    return Component.text().append(
+    /**
+     * 「jaoSuperAchievement」というプレフィックスを返します。
+     *
+     * @return プレフィックス
+     */
+    public static Component getjaoSuperAchievement() {
+        return Component.text().append(
             Component.text("j", NamedTextColor.RED),
             Component.text("a", NamedTextColor.GOLD),
             Component.text("o", NamedTextColor.YELLOW),
@@ -44,5 +46,5 @@ public class AchievementAPI {
             Component.text("t", NamedTextColor.AQUA),
             Component.text("2", NamedTextColor.BLUE)
         ).build();
-	}
+    }
 }

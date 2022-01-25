@@ -14,13 +14,14 @@ public class ExpectedWriter implements AchievementInterface, Listener {
     public Achievement getAchievement() {
         return Achievement.EXPECTEDWRITER;
     }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnEditBook(PlayerEditBookEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
-        if(!event.isSigning()){
+        if (!event.isSigning()) {
             return;
         }
         Achievementjao.getAchievementAsync(player, getAchievement());

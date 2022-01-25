@@ -1,30 +1,27 @@
 package com.jaoafa.jaosuperachievement2.lib;
 
+import com.jaoafa.jaosuperachievement2.Main;
 import okhttp3.*;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class Discord {
-	private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-	String token;
+public record Discord(String token) {
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-	public Discord(String token) {
-		this.token = token;
-	}
-
-	/**
-	 * Discordにメッセージを送信します。
-	 * @param channelId チャンネルID
-	 * @param content メッセージテキスト
+    /**
+     * Discordにメッセージを送信します。
+     *
+     * @param channelId チャンネルID
+     * @param content   メッセージテキスト
      */
-	public void sendMessage(String channelId, String content) {
-		try {
+    public void sendMessage(String channelId, String content) {
+        try {
             JSONObject paramobj = new JSONObject();
             paramobj.put("content", content);
 
             String url = "https://discord.com/api/channels/" + channelId + "/messages";
-            RequestBody body = RequestBody.create(JSON, paramobj.toString()); // NoSuchMethodError: okhttp3.RequestBody.create
+            RequestBody body = RequestBody.create(paramobj.toString(), JSON);
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                 .url(url)
@@ -37,12 +34,13 @@ public class Discord {
                 if (response.isSuccessful()) {
                     return;
                 }
-                if (response.body() != null) {
-                    System.out.println("[jaoSuperAchievement2] Discord Warning: " + response.body().string());
+                ResponseBody responseBody = response.body();
+                if (responseBody != null) {
+                    Main.getMainLogger().info("[jaoSuperAchievement2] Discord Warning: " + responseBody.string());
                 }
             }
         } catch (IOException e) {
-			System.out.println("[jaoSuperAchievement2] Discord IOException: " + e.getMessage());
+            Main.getMainLogger().info("[jaoSuperAchievement2] Discord IOException: " + e.getMessage());
         }
-	}
+    }
 }
