@@ -1,4 +1,5 @@
 package com.jaoafa.jaosuperachievement2.achievements;
+
 import com.jaoafa.jaosuperachievement2.api.Achievementjao;
 import com.jaoafa.jaosuperachievement2.lib.Achievement;
 import com.jaoafa.jaosuperachievement2.lib.AchievementInterface;
@@ -20,11 +21,10 @@ public class ForestBear implements AchievementInterface, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnClose(InventoryCloseEvent event) {
-        if (!(event.getPlayer() instanceof Player)) {
+        if (!(event.getPlayer() instanceof Player player)) {
             return;
         }
-        Player player = (Player) event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 

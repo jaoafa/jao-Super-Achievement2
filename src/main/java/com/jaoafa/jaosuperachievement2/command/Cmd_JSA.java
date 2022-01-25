@@ -13,24 +13,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public class Cmd_JSA implements CommandExecutor {
-	JavaPlugin plugin;
-
-	public Cmd_JSA(JavaPlugin plugin) {
-		this.plugin = plugin;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (!(sender instanceof Player)) {
+public record Cmd_JSA(JavaPlugin plugin) implements CommandExecutor {
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
                 Component.text("このコマンドはプレイヤーからのみ実行できます。")
             ));
             return true;
         }
-        Player player = (Player) sender;
         if (args.length == 1) {
             OfflinePlayer offplayer = Bukkit.getOfflinePlayer(args[0]);
             new Task_OpenPage(player, offplayer, 1).runTaskAsynchronously(Main.getJavaPlugin());

@@ -14,10 +14,11 @@ public class UndergroundPeople implements AchievementInterface, Listener {
     public Achievement getAchievement() {
         return Achievement.UNDERGROUNDPEOPLE;
     }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 

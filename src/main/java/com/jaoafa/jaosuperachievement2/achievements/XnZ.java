@@ -19,10 +19,11 @@ public class XnZ implements AchievementInterface, Listener {
     public Achievement getAchievement() {
         return Achievement.XNZ;
     }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 

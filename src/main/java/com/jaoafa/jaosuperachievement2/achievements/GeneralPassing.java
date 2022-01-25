@@ -15,17 +15,17 @@ import java.util.Map;
 import java.util.UUID;
 
 public class GeneralPassing implements AchievementInterface, Listener {
+    final Map<UUID, Long> LoginTime = new HashMap<>();
+
     @Override
     public Achievement getAchievement() {
         return Achievement.GENERALPASSING;
     }
 
-    Map<UUID, Long> LoginTime = new HashMap<>();
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
         LoginTime.put(player.getUniqueId(), System.currentTimeMillis() / 1000L);
@@ -34,7 +34,7 @@ public class GeneralPassing implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 

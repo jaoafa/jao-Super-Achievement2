@@ -21,13 +21,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.StringWriter;
 import java.sql.*;
-import java.util.Date;
 import java.util.*;
 
 public class Task_OpenPage extends BukkitRunnable {
-    Player player;
-    OfflinePlayer offplayer;
-    int page;
+    final Player player;
+    final OfflinePlayer offplayer;
+    final int page;
+    final Map<Integer, Integer> gettedPlayerCountCache = new LinkedHashMap<>();
+    long gettedPlayerCountCache_unixtime = -1;
 
     public Task_OpenPage(Player player, OfflinePlayer offplayer, int page) {
         this.player = player;
@@ -46,12 +47,12 @@ public class Task_OpenPage extends BukkitRunnable {
             Inventory inv = Bukkit.getServer().createInventory(player, 4 * 9,
                 Component.text(offplayer.getName() + "のjaoSuperAchievement"));
 
-            int Getted = getGettedAchievementCount(offplayer.getUniqueId());
-            int notGetted = getNotGettedAchievementCount(offplayer.getUniqueId());
+            int Got = getGettedAchievementCount(offplayer.getUniqueId());
+            int notGot = getNotGettedAchievementCount(offplayer.getUniqueId());
 
             setItemSkull(inv, 4, offplayer, AchievementAPI.getjaoSuperAchievement(),
-                Component.text("解除済み実績数: " + Getted + "個", NamedTextColor.GREEN),
-                Component.text("未解除実績数: " + notGetted + "個", NamedTextColor.RED)
+                Component.text("解除済み実績数: " + Got + "個", NamedTextColor.GREEN),
+                Component.text("未解除実績数: " + notGot + "個", NamedTextColor.RED)
             );
 
             // インベントリスロット
@@ -60,15 +61,6 @@ public class Task_OpenPage extends BukkitRunnable {
             int i = 9;
             MySQLDBManager sqlmanager = Main.getMySQLDBManager();
             Connection conn = sqlmanager.getConnection();
-
-            String nowVer = Main.getJavaPlugin().getDescription().getVersion();
-            String[] day_time = nowVer.split("_");
-            String[] days = day_time[0].split("\\.");
-            String[] times = day_time[1].split("\\.");
-            Calendar build_cal = Calendar.getInstance();
-            build_cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
-            build_cal.set(Integer.parseInt(days[0]), Integer.parseInt(days[1]), Integer.parseInt(days[2]), Integer.parseInt(times[0]), Integer.parseInt(times[1]));
-            Date build_date = build_cal.getTime();
 
             PreparedStatement statement = conn.prepareStatement("SELECT * FROM jaoSuperAchievement2_Type LIMIT ?, ?");
             statement.setInt(1, (page - 1) * 27);
@@ -81,31 +73,28 @@ public class Task_OpenPage extends BukkitRunnable {
                 boolean hidden = res.getBoolean("hidden");
                 Timestamp date = res.getTimestamp("created_at");
                 String date_str = Main.sdfFormat(date);
-                int gettedplayercount = getGettedPlayerCount(id);
+                int gotPlayerCount = getGettedPlayerCount(id);
 
-                boolean getted = isGetted(offplayer, id);
+                boolean got = isGot(offplayer, id);
                 Material material;
                 String msg;
                 String hiddenmsg = "";
-                String unlockdate;
+                String unlockDate;
                 int damage = id % 16;
-                if (getted) {
-                    String gettedTime = getGettedTime(offplayer, id);
+                if (got) {
+                    String gotTime = getGotTime(offplayer, id);
                     material = getWOOL(damage); // 取得済みなら羊毛
                     msg = ChatColor.GREEN + "実績取得済み";
-                    unlockdate = "(解除日時: " + gettedTime + " | 解除者数: " + gettedplayercount + "人)";
+                    unlockDate = "(解除日時: " + gotTime + " | 解除者数: " + gotPlayerCount + "人)";
                 } else {
                     material = getSTAINED_GLASS(damage); // 未取得なら色付きガラス
                     msg = ChatColor.RED + "実績未取得";
-                    unlockdate = "(解除者数: " + gettedplayercount + "人)";
+                    unlockDate = "(解除者数: " + gotPlayerCount + "人)";
 
                     if (hidden) { // 隠し要素なら説明の文字列を全部アスタリスクにする
                         description = replaceAsterisk(description);
                     }
                 }
-
-                // 登録時刻のほうが大きかったら
-                String unimplemented = date.after(build_date) ? " ※未実装の可能性有" : "";
 
                 if (hidden)
                     hiddenmsg = "※隠し要素";
@@ -117,10 +106,9 @@ public class Task_OpenPage extends BukkitRunnable {
                         Component.text(msg),
                         Component.text(hiddenmsg, NamedTextColor.GOLD, TextDecoration.UNDERLINED)
                     ).build(),
-                    Component.text(unlockdate, NamedTextColor.BLUE),
+                    Component.text(unlockDate, NamedTextColor.BLUE),
                     Component.text().append(
-                        Component.text("実装日時: " + date_str, NamedTextColor.LIGHT_PURPLE),
-                        Component.text(unimplemented, NamedTextColor.RED)
+                        Component.text("実装日時: " + date_str, NamedTextColor.LIGHT_PURPLE)
                     ).build()
                 );
                 //if(i >= 35) break;
@@ -156,7 +144,7 @@ public class Task_OpenPage extends BukkitRunnable {
         }
     }
 
-    Material getWOOL(int damage){
+    Material getWOOL(int damage) {
         List<Material> materials = Arrays.asList(
             Material.WHITE_WOOL,
             Material.ORANGE_WOOL,
@@ -177,7 +165,7 @@ public class Task_OpenPage extends BukkitRunnable {
         return materials.get(damage);
     }
 
-    Material getSTAINED_GLASS(int damage){
+    Material getSTAINED_GLASS(int damage) {
         List<Material> materials = Arrays.asList(
             Material.WHITE_STAINED_GLASS,
             Material.ORANGE_STAINED_GLASS,
@@ -222,7 +210,8 @@ public class Task_OpenPage extends BukkitRunnable {
     void setItemSkull(Inventory inv, int index, String name, Component title) {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta skull_meta = (SkullMeta) item.getItemMeta();
-        skull_meta.setOwner(name);
+        //noinspection deprecation
+        skull_meta.setOwningPlayer(Bukkit.getOfflinePlayer(name));
         skull_meta.displayName(title);
         item.setItemMeta(skull_meta);
         inv.setItem(index, item);
@@ -239,7 +228,7 @@ public class Task_OpenPage extends BukkitRunnable {
         inv.setItem(index, item);
     }
 
-    boolean isGetted(OfflinePlayer offplayer, int id) {
+    boolean isGot(OfflinePlayer offplayer, int id) {
         try {
             MySQLDBManager sqlmanager = Main.getMySQLDBManager();
             Connection conn = sqlmanager.getConnection();
@@ -264,7 +253,7 @@ public class Task_OpenPage extends BukkitRunnable {
         }
     }
 
-    String getGettedTime(OfflinePlayer offplayer, int id) {
+    String getGotTime(OfflinePlayer offplayer, int id) {
         try {
             MySQLDBManager sqlmanager = Main.getMySQLDBManager();
             Connection conn = sqlmanager.getConnection();
@@ -289,9 +278,6 @@ public class Task_OpenPage extends BukkitRunnable {
             return null;
         }
     }
-
-    Map<Integer, Integer> gettedPlayerCountCache = new LinkedHashMap<>();
-    long gettedPlayerCountCache_unixtime = -1;
 
     int getGettedPlayerCount(int id) {
         if (gettedPlayerCountCache_unixtime != -1

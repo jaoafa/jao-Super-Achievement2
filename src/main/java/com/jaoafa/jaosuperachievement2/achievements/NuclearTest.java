@@ -18,17 +18,17 @@ public class NuclearTest implements AchievementInterface, Listener {
     public Achievement getAchievement() {
         return Achievement.NUCLEARTEST;
     }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnGetTNT(InventoryCloseEvent event) {
-        if (!(event.getPlayer() instanceof Player)) {
+        if (!(event.getPlayer() instanceof Player player)) {
             return;
         }
-        Player player = (Player) event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 
-        if(Arrays.stream(player.getInventory().getContents()).filter(Objects::nonNull).noneMatch(item -> item.getType() == Material.TNT)){
+        if (Arrays.stream(player.getInventory().getContents()).filter(Objects::nonNull).noneMatch(item -> item.getType() == Material.TNT)) {
             return;
         }
 

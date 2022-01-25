@@ -107,8 +107,8 @@ public class Achievementjao {
     /**
      * 実績を付与します。
      *
-     * @param player 実績を取得するプレイヤー
-     * @param achievement 取得する実績
+     * @param player          実績を取得するプレイヤー
+     * @param achievement     取得する実績
      * @param isGrantAnnounce チャット・Discordメッセージを出すかどうか
      * @see #getAchievementAsync(Player, Achievement)
      * @deprecated 同期的に動作してしまうため、 getAchievementAsync(Player, Achievement) を使用して下さい。
@@ -181,21 +181,21 @@ public class Achievementjao {
      * 実績を付与します。<br>
      * このメソッドでは、チャット・Discordメッセージを出します。
      *
-     * @param offplayer 実績を取得するプレイヤー
+     * @param offplayer   実績を取得するプレイヤー
      * @param achievement 取得する実績
      * @see #getAchievementAsync(OfflinePlayer, Achievement)
      * @deprecated 同期的に動作してしまうため、 getAchievementAsync(OfflinePlayer, Achievement) を使用して下さい。
      */
     @Deprecated
-    public static void getAchievement(OfflinePlayer offplayer, Achievement achievement){
+    public static void getAchievement(OfflinePlayer offplayer, Achievement achievement) {
         getAchievement(offplayer, achievement, true);
     }
 
     /**
      * 実績を付与します。同期的に動作してしまうため、 getAchievementAsync(OfflinePlayer, Achievement) を使用して下さい。
      *
-     * @param offplayer 実績を取得するプレイヤー
-     * @param achievement 取得する実績
+     * @param offplayer       実績を取得するプレイヤー
+     * @param achievement     取得する実績
      * @param isGrantAnnounce チャット・Discordメッセージを出すかどうか
      * @see #getAchievementAsync(OfflinePlayer, Achievement)
      */
@@ -246,7 +246,7 @@ public class Achievementjao {
     /**
      * 既に実績を取得しているかどうかを返します。
      *
-     * @param player 取得しているかどうかを確認するプレイヤー
+     * @param player      取得しているかどうかを確認するプレイヤー
      * @param achievement 実績
      * @return 実績を取得しているか
      * @see #isAlreadyGotAchievement(OfflinePlayer, Achievement)
@@ -260,7 +260,7 @@ public class Achievementjao {
     /**
      * 既に実績を取得しているかどうかを返します。
      *
-     * @param player 取得しているかどうかを確認するプレイヤー
+     * @param player      取得しているかどうかを確認するプレイヤー
      * @param achievement 実績
      * @return 実績を取得しているか
      */
@@ -307,8 +307,8 @@ public class Achievementjao {
      *
      * @param id 実績のId
      * @return その実績を取得済みのプレイヤー数
-     * @deprecated メソッド名および引数の変更
      * @see #getGotPlayerCount(Achievement)
+     * @deprecated メソッド名および引数の変更
      */
     @Deprecated
     static int getGettedPlayerCount(int id) {
@@ -322,7 +322,7 @@ public class Achievementjao {
      * @return その実績を取得済みのプレイヤー数
      */
     static int getGotPlayerCount(Achievement achievement) {
-        if(achievement == null){
+        if (achievement == null) {
             return 0;
         }
         try {

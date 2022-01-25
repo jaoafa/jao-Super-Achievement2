@@ -10,7 +10,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class ClassFinder {
-	private final ClassLoader classLoader;
+    private final ClassLoader classLoader;
 
     public ClassFinder() {
         classLoader = Thread.currentThread().getContextClassLoader();
@@ -57,7 +57,11 @@ public class ClassFinder {
     private List<Class<?>> findClassesWithFile(String packageName, File dir) throws Exception {
         List<Class<?>> classes = new ArrayList<>();
 
-        for (String path : dir.list()) {
+        String[] dirList = dir.list();
+        if (dirList == null) {
+            return classes;
+        }
+        for (String path : dirList) {
             File entry = new File(dir, path);
             if (entry.isFile() && isClassFile(entry.getName())) {
                 classes.add(classLoader.loadClass(packageName + "." + fileNameToClassName(entry.getName())));
@@ -72,7 +76,7 @@ public class ClassFinder {
     private List<Class<?>> findClassesWithJarFile(String rootPackageName, URL jarFileUrl) throws Exception {
         List<Class<?>> classes = new ArrayList<>();
 
-        JarURLConnection jarUrlConnection = (JarURLConnection)jarFileUrl.openConnection();
+        JarURLConnection jarUrlConnection = (JarURLConnection) jarFileUrl.openConnection();
 
         try (JarFile jarFile = jarUrlConnection.getJarFile()) {
             Enumeration<JarEntry> jarEnum = jarFile.entries();

@@ -21,7 +21,7 @@ public class Botch implements AchievementInterface, Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
         if (Bukkit.getServer().getOnlinePlayers().size() != 1) {
@@ -32,17 +32,17 @@ public class Botch implements AchievementInterface, Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        if((Bukkit.getServer().getOnlinePlayers().size() - 1) != 1){
+        if ((Bukkit.getServer().getOnlinePlayers().size() - 1) != 1) {
             return;
         }
         Optional<? extends Player> player = Bukkit.getServer().getOnlinePlayers().stream()
             .filter(p -> p.getUniqueId() != event.getPlayer().getUniqueId())
             .findFirst();
 
-        if (!player.isPresent()) {
+        if (player.isEmpty()) {
             return;
         }
-        if(player.get().hasMetadata("NPC")){
+        if (player.get().hasMetadata("NPC")) {
             return;
         }
 

@@ -21,11 +21,10 @@ public class Mask implements AchievementInterface, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnMASK(InventoryCloseEvent event) { // インベントリを閉じたとき
-        if (!(event.getPlayer() instanceof Player)) {
+        if (!(event.getPlayer() instanceof Player player)) {
             return;
         }
-        Player player = (Player) event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 

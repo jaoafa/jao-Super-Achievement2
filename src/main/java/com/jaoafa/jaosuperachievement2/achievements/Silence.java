@@ -5,7 +5,6 @@ import com.jaoafa.jaosuperachievement2.lib.Achievement;
 import com.jaoafa.jaosuperachievement2.lib.AchievementInterface;
 import com.jaoafa.jaosuperachievement2.task.Task_Silence;
 import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,22 +15,22 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 
 public class Silence implements AchievementInterface, Listener {
-    @Override
-    public Achievement getAchievement() {
-        return Achievement.SILENCE;
-    }
-
-    static List<UUID> Speaked = new ArrayList<>();
-    static Map<UUID, BukkitTask> SilenceTask = new HashMap<>();
+    static final List<UUID> Speaked = new ArrayList<>();
+    static final Map<UUID, BukkitTask> SilenceTask = new HashMap<>();
 
     public static List<UUID> getSpeaked() {
         return Speaked;
     }
 
+    @Override
+    public Achievement getAchievement() {
+        return Achievement.SILENCE;
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 
@@ -48,7 +47,7 @@ public class Silence implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 

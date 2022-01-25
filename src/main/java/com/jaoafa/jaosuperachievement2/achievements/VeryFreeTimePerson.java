@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class VeryFreeTimePerson implements AchievementInterface, Listener {
-    Set<UUID> Crafted = new HashSet<>(); // 既に石炭ブロック→石炭してるか
+    final Set<UUID> Crafted = new HashSet<>(); // 既に石炭ブロック→石炭してるか
 
     @Override
     public Achievement getAchievement() {
@@ -30,7 +30,7 @@ public class VeryFreeTimePerson implements AchievementInterface, Listener {
             return;
         }
         Player player = (Player) event.getWhoClicked();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
         ItemStack is = event.getRecipe().getResult();

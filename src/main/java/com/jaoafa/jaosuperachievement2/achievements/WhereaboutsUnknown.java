@@ -16,22 +16,22 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 
 public class WhereaboutsUnknown implements AchievementInterface, Listener {
-    @Override
-    public Achievement getAchievement() {
-        return Achievement.WHEREABOUTSUNKNOWN;
-    }
-
-    static List<UUID> Actioned = new ArrayList<>();
-    static Map<UUID, BukkitTask> WhereaboutsUnknownTask = new HashMap<>();
+    static final List<UUID> Actioned = new ArrayList<>();
+    static final Map<UUID, BukkitTask> WhereaboutsUnknownTask = new HashMap<>();
 
     public static List<UUID> getActioned() {
         return Actioned;
     }
 
+    @Override
+    public Achievement getAchievement() {
+        return Achievement.WHEREABOUTSUNKNOWN;
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 
@@ -43,7 +43,7 @@ public class WhereaboutsUnknown implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 
@@ -55,13 +55,13 @@ public class WhereaboutsUnknown implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 
         Actioned.remove(player.getUniqueId());
         if (WhereaboutsUnknownTask.containsKey(player.getUniqueId())
-                && !WhereaboutsUnknownTask.get(player.getUniqueId()).isCancelled()) {
+            && !WhereaboutsUnknownTask.get(player.getUniqueId()).isCancelled()) {
             WhereaboutsUnknownTask.get(player.getUniqueId()).cancel();
             WhereaboutsUnknownTask.remove(player.getUniqueId());
         }

@@ -7,219 +7,132 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.apache.commons.lang3.time.DateFormatUtils;
+import okhttp3.ResponseBody;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Cmd_jaoSuperAchievement2 implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        PluginDescriptionFile desc = Main.getJavaPlugin().getDescription();
-        String nowVer = desc.getVersion();
-        Date nowVerDate = getVersionDate(nowVer);
-        String nowVerSha = getVersionSha(nowVer);
-        if (nowVerSha == null) {
+        JavaPlugin plugin = Main.getJavaPlugin();
+        if (plugin == null) {
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
-                Component.text("現バージョンの取得に失敗しました。", NamedTextColor.AQUA)
+                Component.text("JavaPluginの取得に失敗しました。", NamedTextColor.AQUA)
             ));
             return true;
         }
-		String latestVer = getVersion(desc.getName());
-		if(latestVer == null){
+        PluginDescriptionFile desc = plugin.getDescription();
+        String nowVersion = desc.getVersion();
+        String latestVersion = getLatestVersion();
+        if (latestVersion == null) {
             sender.sendMessage(Component.text().append(
                 AchievementAPI.getPrefix(),
-                Component.text("現バージョンの取得に失敗しました。", NamedTextColor.AQUA)
+                Component.text("最新バージョンの取得に失敗しました。", NamedTextColor.AQUA)
             ));
-		    return true;
+            return true;
         }
-		Date latestVerDate = getVersionDate(latestVer);
-		String latestVerSha = getLastCommitSha(desc.getName());
-
+        int compare = compareVersion(nowVersion, latestVersion);
+        if (compare == 0) {
+            sender.sendMessage(Component.text().append(
+                AchievementAPI.getPrefix(),
+                Component.text("現在のバージョンは最新です。", NamedTextColor.AQUA)
+            ));
+            return true;
+        }
+        if (compare == 1) {
+            sender.sendMessage(Component.text().append(
+                AchievementAPI.getPrefix(),
+                Component.text("現在のバージョンよりも新しいバージョンがあります。", NamedTextColor.AQUA),
+                Component.text("最新バージョン: ", NamedTextColor.AQUA),
+                Component.text(latestVersion, NamedTextColor.GREEN)
+            ));
+            return true;
+        }
+        if (compare == -1) {
+            sender.sendMessage(Component.text().append(
+                AchievementAPI.getPrefix(),
+                Component.text("現在のバージョンよりも最新バージョンが古いです。", NamedTextColor.AQUA),
+                Component.text("最新バージョン: ", NamedTextColor.AQUA),
+                Component.text(latestVersion, NamedTextColor.GREEN)
+            ));
+            return true;
+        }
         sender.sendMessage(Component.text().append(
             AchievementAPI.getPrefix(),
-            Component.text("----- " + desc.getName() + " infomation -----", NamedTextColor.AQUA)
+            Component.text("バージョンチェックに失敗しました。", NamedTextColor.AQUA)
         ));
+        return true;
+    }
 
-		if (nowVer.equals(latestVer)) {
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("現在導入されているバージョンは最新です。", NamedTextColor.AQUA)
-            ));
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("導入バージョン: " + nowVer, NamedTextColor.AQUA)
-            ));
-		} else if (nowVerSha.equals(latestVerSha)) {
-			// shaがおなじ
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("現在導入されているバージョンは最新です。", NamedTextColor.AQUA)
-            ));
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("導入バージョン: " + nowVer, NamedTextColor.AQUA)
-            ));
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("最新バージョン: " + latestVer + " (" + latestVerSha + ")", NamedTextColor.AQUA)
-            ));
-		} else if (nowVerDate.before(latestVerDate)) {
-			// 新しいバージョンあり
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("現在導入されているバージョンよりも新しいバージョンがリリースされています。", NamedTextColor.AQUA)
-            ));
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("導入バージョン: " + nowVer, NamedTextColor.AQUA)
-            ));
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("最新バージョン: " + latestVer + " (" + latestVerSha + ")", NamedTextColor.AQUA)
-            ));
-		} else if (nowVerDate.after(latestVerDate)) {
-			// リリースバージョンよりも導入されている方が新しい
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("現在導入されているバージョンは最新です。(※)", NamedTextColor.AQUA)
-            ));
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("導入バージョン: " + nowVer, NamedTextColor.AQUA)
-            ));
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("最新バージョン: " + latestVer + " (" + latestVerSha + ")", NamedTextColor.AQUA)
-            ));
-		}
+    /**
+     * セマンティック・バージョニングに基づき、バージョンを比較します。
+     *
+     * @param version1 バージョンひとつめ
+     * @param version2 バージョンふたつめ
+     * @return version1 が version2 より新しい場合は 1、version1 が version2 より古い場合は -1、同じ/セマンティック・バージョニングに合致しなければ 0
+     */
+    private int compareVersion(String version1, String version2) {
+        Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)");
+        Matcher match1 = pattern.matcher(version1);
+        if (!match1.matches()) {
+            return 0;
+        }
+        Matcher match2 = pattern.matcher(version2);
+        if (!match2.matches()) {
+            return 0;
+        }
+        if (version1.equals(version2)) {
+            return 0;
+        }
+        int[] v1 = new int[]{
+            Integer.parseInt(match1.group(1)),
+            Integer.parseInt(match1.group(2)),
+            Integer.parseInt(match1.group(3))
+        };
+        int[] v2 = new int[]{
+            Integer.parseInt(match2.group(1)),
+            Integer.parseInt(match2.group(2)),
+            Integer.parseInt(match2.group(3))
+        };
+        for (int i = 0; i < 3; i++) {
+            if (v1[i] > v2[i]) {
+                return -1;
+            }
+        }
+        return 1;
+    }
 
-        sender.sendMessage(Component.text().append(
-            AchievementAPI.getPrefix(),
-            Component.text("最近の更新履歴", NamedTextColor.AQUA)
-        ));
-		List<String> commits = getCommits(desc.getName());
-		if (commits == null) {
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("- コミット履歴の取得に失敗しました。", NamedTextColor.AQUA)
-            ));
-			return true;
-		}
-		for (String commit : commits) {
-            sender.sendMessage(Component.text().append(
-                AchievementAPI.getPrefix(),
-                Component.text("- " + commit, NamedTextColor.AQUA)
-            ));
-		}
-		return true;
-	}
-
-	private List<String> getCommits(String repo) {
-		LinkedList<String> ret = new LinkedList<>();
-		try {
-            String url = "https://api.github.com/repos/jaoafa/" + repo + "/commits";
+    private String getLatestVersion() {
+        try {
+            String url = "https://api.github.com/repos/jaoafa/jao-Super-Achievement2/releases/latest";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder().url(url).get().build();
             Response response = client.newCall(request).execute();
             if (response.code() != 200) {
                 return null;
             }
-            JSONArray array = new JSONArray(Objects.requireNonNull(response.body()).string());
-            response.close();
-
-            for (int i = 0; i < array.length() && i < 5; i++) {
-                JSONObject obj = array.getJSONObject(i).getJSONObject("commit");
-                Date date = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT
-                    .parse(obj.getJSONObject("committer").getString("date"));
-                String sha = array.getJSONObject(i).getString("sha").substring(0, 7);
-                ret.add("[" + sdfFormat(date) + "|" + sha + "] " + obj.getString("message"));
-            }
-
-			return ret;
-		} catch (IOException | JSONException | ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private String getLastCommitSha(String repo) {
-		try {
-			String url = "https://api.github.com/repos/jaoafa/" + repo + "/commits";
-			OkHttpClient client = new OkHttpClient();
-			Request request = new Request.Builder().url(url).get().build();
-			Response response = client.newCall(request).execute();
-			if (response.code() != 200) {
-				return null;
-			}
-			JSONArray array = new JSONArray(response.body().string());
-			response.close();
-
-			return array.getJSONObject(0).getString("sha").substring(0, 7);
-		} catch (IOException | JSONException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private Date getVersionDate(String version) {
-		String[] day_time = version.split("_");
-		String[] days = day_time[0].split("\\.");
-		String[] times = day_time[1].split("\\.");
-		Calendar build_cal = Calendar.getInstance();
-		build_cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
-		build_cal.set(Integer.parseInt(days[0]),
-				Integer.parseInt(days[1]),
-				Integer.parseInt(days[2]),
-				Integer.parseInt(times[0]),
-				Integer.parseInt(times[1]));
-		return build_cal.getTime();
-	}
-
-	private String getVersionSha(String version) {
-		String[] day_time = version.split("_");
-		if (day_time.length == 3) {
-			return day_time[2];
-		}
-		return null;
-	}
-
-	private String getVersion(String repo) {
-		try {
-            String url = "https://raw.githubusercontent.com/jaoafa/" + repo + "/master/src/main/resources/plugin.yml";
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(url).get().build();
-            Response response = client.newCall(request).execute();
-            if (response.code() != 200) {
+            ResponseBody body = response.body();
+            if (body == null) {
                 return null;
             }
-            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(Objects.requireNonNull(response.body()).charStream());
-            response.close();
-            if (yaml.contains("version")) {
-                return yaml.getString("version");
-            } else {
-                return null;
-            }
+            JSONObject object = new JSONObject(body.string());
+            Pattern pattern = Pattern.compile("v(\\d+\\.\\d+\\.\\d+)"); // e.g., v1.0.0
+            return pattern
+                .matcher(object.getString("tag_name"))
+                .replaceAll("$1");
         } catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	String sdfFormat(Date date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		return sdf.format(date);
-	}
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -6,7 +6,7 @@ import com.jaoafa.jaosuperachievement2.lib.AchievementInterface;
 import com.jaoafa.jaosuperachievement2.task.Task_Hai;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,17 +20,18 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Hai implements AchievementInterface, Listener {
+    static final Map<UUID, Long> LoginTime = new HashMap<>();
+    static final Map<UUID, BukkitTask> HaiTask = new HashMap<>();
+
     @Override
     public Achievement getAchievement() {
         return Achievement.HAI;
     }
-    static Map<UUID, Long> LoginTime = new HashMap<>();
-    static Map<UUID, BukkitTask> HaiTask = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 
@@ -40,7 +41,7 @@ public class Hai implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
 
@@ -50,11 +51,11 @@ public class Hai implements AchievementInterface, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void OnChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        if(player.hasMetadata("NPC")){
+        if (player.hasMetadata("NPC")) {
             return;
         }
         Component component = event.message();
-        String message = PlainComponentSerializer.plain().serialize(component);
+        String message = PlainTextComponentSerializer.plainText().serialize(component);
 
         if (message.equals("jao") && LoginTime.containsKey(player.getUniqueId())) {
             long unixtime = LoginTime.get(player.getUniqueId());
