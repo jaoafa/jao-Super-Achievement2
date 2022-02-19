@@ -198,7 +198,7 @@ public enum Achievement {
     /**
      * No.49 新たな一歩
      */
-    NEWSTEP(49, "新たな一歩", "爆新地の外に出る", false), // Bakushinchiで実装
+    NEWSTEP(49, "新たな一歩", "中央市の外に出る", false), // ChuoCityで実装
     /**
      * No.50 たまごとケチャップの合わせ技
      */
