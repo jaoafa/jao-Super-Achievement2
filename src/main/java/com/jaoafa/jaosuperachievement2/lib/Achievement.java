@@ -84,10 +84,6 @@ public enum Achievement {
      */
     MASK(20, "MASK", "kohonayoshiのあたまを被る", false),
     /**
-     * No.21 製麺所
-     */
-    NOODLEFACTORY(21, "製麺所", "Nudongeのあたまを被る", false),
-    /**
      * No.22 はじめてのjail
      */
     FIRSTJAIL(22, "はじめてのjail", "jailされる", false), // MyMaid4で実装
