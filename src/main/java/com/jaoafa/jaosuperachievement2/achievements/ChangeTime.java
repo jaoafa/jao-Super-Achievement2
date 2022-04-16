@@ -21,7 +21,7 @@ public class ChangeTime implements AchievementInterface, Listener {
             return;
         }
         String command = event.getMessage();
-        if (!player.hasPermission("minecraft.command.time")) {
+        if (!player.hasPermission("mymaid.time")) {
             return;
         }
         if (!command.startsWith("/time set ")) {
