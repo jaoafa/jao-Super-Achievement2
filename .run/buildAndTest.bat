@@ -1,6 +1,6 @@
 @echo off
 
-set PLUGIN_NAME=ChuoCity
+set PLUGIN_NAME=jaoSuperAchievement2
 set JAR_FILE=jaosuperachievement2-1.0.0-shaded.jar
 
 if not exist server (
