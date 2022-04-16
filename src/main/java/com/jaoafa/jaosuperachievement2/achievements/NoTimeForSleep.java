@@ -14,7 +14,7 @@ public class NoTimeForSleep implements AchievementInterface, Listener {
         return Achievement.NOTIMEFORSLEEP;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void OnBed(PlayerBedEnterEvent event) {
         if (event.getPlayer().hasMetadata("NPC")) {
             return;
