@@ -24,6 +24,10 @@ public class Main extends JavaPlugin {
     static Discord discord = null;
 
     public static JavaPlugin getJavaPlugin() {
+        if (JavaPlugin == null) {
+            Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("jao-Super-Achievement2");
+            return (JavaPlugin) plugin;
+        }
         return JavaPlugin;
     }
 
