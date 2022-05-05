@@ -9,6 +9,8 @@ import com.jaoafa.jaosuperachievement2.lib.Discord;
 import com.jaoafa.jaosuperachievement2.task.Task_jaoists;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Constructor;
@@ -24,6 +26,10 @@ public class Main extends JavaPlugin {
     static Discord discord = null;
 
     public static JavaPlugin getJavaPlugin() {
+        if (JavaPlugin == null) {
+            Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("jao-Super-Achievement2");
+            return (JavaPlugin) plugin;
+        }
         return JavaPlugin;
     }
 
